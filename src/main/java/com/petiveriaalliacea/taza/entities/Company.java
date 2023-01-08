@@ -18,5 +18,9 @@ public class Company {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String name;
+    private String email;
+    private String phoneNumber;
+    private String address;
+
 
 }
