@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll()
                 .and()
                 .authenticationProvider(authenticationProvider())
-                .authorizeHttpRequests().requestMatchers("/api/companies/**").hasRole("ADMIN")
+                .authorizeHttpRequests().requestMatchers("/api/v1/companies/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         return http.build();
@@ -75,7 +75,7 @@ public class SecurityConfig {
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
         config.setExposedHeaders(Arrays.asList("x-auth-token"));
-        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/api/v1/**", config);
         log.info("Registering CORS filter");
         return new CorsFilter(source);
     }
