@@ -33,13 +33,13 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
-
     @Autowired
     private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<String> authenticate(@RequestBody AuthRequestDto request){
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         final UserDetails user = userDetailsService.loadUserByUsername(request.getUsername());
         if (authentication.isAuthenticated()){
             System.out.println("ok");

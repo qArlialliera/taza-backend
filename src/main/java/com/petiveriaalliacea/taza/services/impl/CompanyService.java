@@ -15,24 +15,19 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class CompanyService implements ICompanyService {
-
     private final CompanyRepository companyRepository;
-
     @Override
     public List<Company> getCompanies() {
         return companyRepository.findAll();
     }
-
     @Override
     public Company getCompany(Long id) {
         return companyRepository.findById(id).get();
     }
-
     @Override
     public Company addNewCompany(Company newCompany){
         return companyRepository.save(newCompany);
     }
-
     @Override
     public Company editCompany(Long id, Company company) {
         return companyRepository.findById(id).map(
@@ -49,7 +44,6 @@ public class CompanyService implements ICompanyService {
         });
 
     }
-
     @Override
     public String deleteCompany(Long id) {
         if(companyRepository.findById(id).isPresent()) {

@@ -29,19 +29,13 @@ public class UserService implements IUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-//    private final UserMapper userMapper;
-
     @Override
     public User register(UserRequestDto userDto) {
-//        log.info("Registration of user {}", user.getUsername());
         boolean userExists = userRepository.findByUsername(userDto.getUsername()).isPresent();
         if(userExists){
             throw new IllegalStateException("User with this username already exists!");
         }
         String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(userDto.getPassword());
-
-//        User user = userMapper.INSTANCE.userDtoToUser(userDto);
-
         User user = UserObjectMapper.convertToUserDto(userDto);
         user.setPassword(encodedPassword);
 
@@ -50,7 +44,6 @@ public class UserService implements IUserService {
 
     @Override
     public Role addRole(Role role) {
-//        log.info("Saving new role {} to the database", role.getName());
         return roleRepository.save(role);
     }
 
