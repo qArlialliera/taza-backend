@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/companies")
 @RequiredArgsConstructor
+@CrossOrigin(allowedHeaders = "*", origins = "*")
 public class CompanyController {
     private final CompanyService companyService;
     @GetMapping("/all")

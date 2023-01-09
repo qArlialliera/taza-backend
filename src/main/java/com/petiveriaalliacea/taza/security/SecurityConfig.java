@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -36,16 +37,17 @@ public class SecurityConfig{
                 .cors()
                 .and()
                 .csrf().disable()
-                .addFilterBefore(corsFilter(),UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
                 .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll()
-                .and()
-                .authorizeHttpRequests().anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests().requestMatchers("/api/companies/**").hasRole("ADMIN")
+                .anyRequest().authenticated();
+
         return http.build();
     }
 
