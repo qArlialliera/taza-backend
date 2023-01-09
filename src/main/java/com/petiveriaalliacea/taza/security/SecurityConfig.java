@@ -14,6 +14,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -31,6 +36,7 @@ public class SecurityConfig{
                 .cors()
                 .and()
                 .csrf().disable()
+                .addFilterBefore(corsFilter(),UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll()
                 .and()
                 .authorizeHttpRequests().anyRequest().authenticated()
@@ -54,6 +60,18 @@ public class SecurityConfig{
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder.bCryptPasswordEncoder());
         return authenticationProvider;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+        config.setExposedHeaders(Arrays.asList("x-auth-token"));
+        source.registerCorsConfiguration("/api/v1/**", config);
+        return new CorsFilter(source);
     }
 
 //    public UserDetailsServiceImp userDetailsService(){
