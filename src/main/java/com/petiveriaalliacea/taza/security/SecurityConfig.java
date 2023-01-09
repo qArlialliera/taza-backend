@@ -1,6 +1,8 @@
 package com.petiveriaalliacea.taza.security;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,8 +27,8 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig{
-
+public class SecurityConfig {
+    private final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
     private final JwtAuthFilter jwtAuthFilter;
     @Autowired
     private UserDetailsService userDetailsService;
@@ -33,23 +36,22 @@ public class SecurityConfig{
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http
-                .cors()
-                .and()
-                .csrf().disable()
-                .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
-                .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll()
-                .and()
+        http.csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll()
+                .and()
+                .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests().requestMatchers("/api/companies/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         return http.build();
     }
+
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -73,6 +75,7 @@ public class SecurityConfig{
         config.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
         config.setExposedHeaders(Arrays.asList("x-auth-token"));
         source.registerCorsConfiguration("/api/v1/**", config);
+        log.info("Registering CORS filter");
         return new CorsFilter(source);
     }
 
