@@ -103,6 +103,13 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User getUser() {
+        Optional<User> user = userRepository.findByUsername(SecurityUtils.getCurrentUserLogin());
+        if(user.isPresent())  return user.get();
+        else throw new IllegalStateException("User with this username already exists!");
+    }
+
+    @Override
     public String addAdminRole(Long id) {
         log.info("Adding admin role to the user {}", id);
         Optional<User> user = userRepository.findById(id);

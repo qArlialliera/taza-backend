@@ -13,6 +13,5 @@ public interface IUserService {
     List<User> getUsers();
     String deleteUser();
     String editUser(UserRequestDto user);
-
-//    User getUser(String username);
+    User getUser();
 }

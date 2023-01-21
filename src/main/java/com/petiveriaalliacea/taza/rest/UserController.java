@@ -34,6 +34,11 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
+    @GetMapping("/user-details")
+    public ResponseEntity<User> getUser(){
+        return ResponseEntity.ok().body(userService.getUser());
+    }
+
     @PutMapping("/edit/profile")
     public ResponseEntity editUser(@RequestBody UserRequestDto userEdit){
         return ResponseEntity.ok(userService.editUser(userEdit));
