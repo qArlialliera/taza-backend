@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +30,6 @@ public class User {
     private String city;
     private String address;
     @ManyToMany(fetch = EAGER)
+    @JsonIgnore
     private Collection<Role> roles = new ArrayList<>();
 }

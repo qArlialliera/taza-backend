@@ -1,5 +1,7 @@
 package com.petiveriaalliacea.taza.rest;
 
+import com.petiveriaalliacea.taza.dto.UserRequestDto;
+import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.entities.Role;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.services.impl.UserService;
@@ -14,23 +16,12 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
     @Autowired
     private UserService userService;
-
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers(){
-        return ResponseEntity.ok().body(userService.getUsers());
-    }
-
-//    @PostMapping("/user/register")
-//    public ResponseEntity<User> register(@RequestBody User user){
-//        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/register").toUriString());
-//        return ResponseEntity.created(uri).body(userService.register(user));
-//    }
 
     @PostMapping("/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role){
@@ -38,11 +29,25 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.addRole(role));
     }
 
-//    @PostMapping("/role/addtouser")
-//    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUser form){
-//        userService.addRoleToUser(form.getUsername(), form.getRoleName());
-//        return ResponseEntity.ok().build();
-//    }
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getUsers(){
+        return ResponseEntity.ok().body(userService.getUsers());
+    }
+
+    @PutMapping("/edit/profile")
+    public ResponseEntity editUser(@RequestBody UserRequestDto userEdit){
+        return ResponseEntity.ok(userService.editUser(userEdit));
+    }
+
+    @DeleteMapping("/delete/profile")
+    private ResponseEntity deleteCompany(){
+        return ResponseEntity.ok(userService.deleteUser());
+    }
+
+    @PutMapping("/role/make-admin/{id}")
+    public ResponseEntity<?> addAdminRole(@PathVariable Long id){
+        return ResponseEntity.ok(userService.addAdminRole(id));
+    }
 }
 
 

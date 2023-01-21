@@ -3,11 +3,12 @@ package com.petiveriaalliacea.taza.services.impl;
 import com.petiveriaalliacea.taza.dto.UserRequestDto;
 import com.petiveriaalliacea.taza.entities.Role;
 import com.petiveriaalliacea.taza.entities.User;
-import com.petiveriaalliacea.taza.mappers.UserMapper;
 import com.petiveriaalliacea.taza.repositories.RoleRepository;
 import com.petiveriaalliacea.taza.repositories.UserRepository;
 import com.petiveriaalliacea.taza.security.PasswordEncoder;
 import com.petiveriaalliacea.taza.services.IUserService;
+import com.petiveriaalliacea.taza.utils.SecurityUtils;
+import com.petiveriaalliacea.taza.utils.StringUtils;
 import com.petiveriaalliacea.taza.utils.UserObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +40,17 @@ public class UserService implements IUserService {
         User user = UserObjectMapper.convertToUserDto(userDto);
         user.setPassword(encodedPassword);
 
+//        Collection<Role> role = Collections.singleton(roleRepository.getById(1L));
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+
+//        User user1 = User.builder()
+//                .username(userDto.getUsername())
+//                .password(encodedPassword)
+//                .email(userDto.getEmail())
+//                .city(userDto.getCity())
+//                .role(roleRepository.getById(1L))
+//                .isActivated(false)
+//                .build();
         return userRepository.save(user);
     }
 
@@ -47,13 +59,79 @@ public class UserService implements IUserService {
         return roleRepository.save(role);
     }
 
+    @Override
+    public List<User> getUsers() {
+//        log.info("Fetching all users");
+        return userRepository.findAll();
+    }
+
+    @Override
+    public String deleteUser() {
+        Optional<User> user = userRepository.findByUsername(SecurityUtils.getCurrentUserLogin());
+        if(userRepository.findById(user.get().getId()).isPresent()) {
+            userRepository.deleteById(user.get().getId());
+            return "User deleted Successfully!";
+        }
+        return "User not found!";
+    }
+    @Override
+    public String editUser(UserRequestDto dto) {
+        Optional<User> user = userRepository.findByUsername(SecurityUtils.getCurrentUserLogin());
+        if (user.isPresent()) {
+            log.debug("User id: {}, changing user details from: {}", user.get().getId(), user.get());
+            if (!StringUtils.isEmpty(dto.getUsername())) {
+                user.get().setUsername(dto.getUsername());
+            }
+            if (!StringUtils.isEmpty(dto.getCity())) {
+                user.get().setCity(dto.getCity());
+            }
+            if (!StringUtils.isEmpty(dto.getAddress())) {
+                user.get().setAddress(dto.getAddress());
+            }
+            if (!StringUtils.isEmpty(dto.getEmail())) {
+                user.get().setEmail(dto.getAddress());
+            }
+            if (!StringUtils.isEmpty(dto.getFullName())) {
+                user.get().setFullName(dto.getFullName());
+            }
+            userRepository.save(user.get());
+            return "Updated successfully!";
+        }
+        else {
+            return "User does not exist!";
+        }
+    }
+
+    @Override
+    public String addAdminRole(Long id) {
+        log.info("Adding admin role to the user {}", id);
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            user.get().setRoles(Arrays.asList(roleRepository.findByName("ROLE_ADMIN")));
+            userRepository.save(user.get());
+            return "Admin role added to the user " + id;
+        }
+        else
+            return "Adding admin role failed! User does not exist.";
+    }
 //    @Override
-//    public void addRoleToUser(String username, String roleName) {
-//        log.info("Adding role {} to the user {}", roleName, username);
-//        User user = userRepository.findByUsername(username);
-//        Role role = roleRepository.findByName(roleName);
-//        user.getRoles().add(role);
+//    public User editUser(Long id, User user) {
+//        return userRepository.findById(id).map(
+//                userEdit -> {
+//                    userEdit.setUsername(user.getUsername());
+//                    userEdit.setFullName(user.getFullName());
+//                    userEdit.setEmail(user.getEmail());
+//                    userEdit.setAddress(user.getAddress());
+//                    userEdit.setCity(user.getCity());
+//                    return userRepository.save(userEdit);
+//                }
+//        ).orElseGet(() -> {
+//            user.setId(id);
+//            return userRepository.save(user);
+//        });
 //    }
+
+
 
 //    @Override
 //    public User getUser(String username) {
@@ -61,10 +139,6 @@ public class UserService implements IUserService {
 //        return userRepository.findByUsername(username);
 //    }
 
-    @Override
-    public List<User> getUsers() {
-//        log.info("Fetching all users");
-        return userRepository.findAll();
-    }
+
 
 }

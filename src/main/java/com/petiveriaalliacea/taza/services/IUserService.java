@@ -9,7 +9,10 @@ import java.util.List;
 public interface IUserService {
     User register(UserRequestDto userDto);
     Role addRole(Role role);
-//    void addRoleToUser(String username, String roleName);
-//    User getUser(String username);
+    String addAdminRole(Long id);
     List<User> getUsers();
+    String deleteUser();
+    String editUser(UserRequestDto user);
+
+//    User getUser(String username);
 }
