@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.rest;
 
+import com.petiveriaalliacea.taza.dto.CompanyRequestDto;
 import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.services.impl.CompanyService;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,9 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.getCompany(id));
     }
     @PostMapping("/add")
-    public ResponseEntity<Company> addNewCompany(@RequestBody Company company){
+    public ResponseEntity<Company> addNewCompany(@RequestBody CompanyRequestDto companyDto){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/companies/add").toUriString());
-        return ResponseEntity.created(uri).body(companyService.addNewCompany(company));
+        return ResponseEntity.created(uri).body(companyService.addNewCompany(companyDto));
     }
     @PutMapping("/{id}")
     public ResponseEntity<Company> editCompany(@RequestBody Company company, @PathVariable Long id){

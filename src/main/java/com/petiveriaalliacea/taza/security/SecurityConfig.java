@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests().requestMatchers("/api/v1/companies/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
+
         return http.build();
     }
 
