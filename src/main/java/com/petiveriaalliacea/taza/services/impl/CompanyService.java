@@ -35,12 +35,12 @@ public class CompanyService implements ICompanyService {
     }
     @Override
     public Company addNewCompany(CompanyRequestDto companyDto){
-        Collection<Category> categories = new ArrayList<>();
-        for (String category : companyDto.getCategories()){
-            categories.add(categoryRepository.findByName(category));
-        }
+//        Collection<Category> categories = new ArrayList<>();
+//        for (Category category : companyDto.getCategories()){
+//            categories.add(categoryRepository.findByName(category));
+//        }
         Company company = CompanyMapper.convertCompanyDto(companyDto);
-        company.setCategories(categories);
+        company.setCategories(companyDto.getCategories());
 
         return companyRepository.save(company);
     }

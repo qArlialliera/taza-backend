@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.dto;
 
+import com.petiveriaalliacea.taza.entities.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +19,6 @@ public class CompanyRequestDto {
     private String email;
     private String phoneNumber;
     private String address;
-    private Collection<String> categories = new ArrayList<>();
+    private Collection<Category> categories = new ArrayList<>();
 
 }
