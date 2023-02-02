@@ -27,6 +27,18 @@ public class JwtUtils {
         return createToken(claims, userDetails);
     }
 
+    public String generateRefreshToken(UserDetails userDetails){
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userDetails.getUsername())
+                .claim("authorities", userDetails.getAuthorities())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(10)))
+                .signWith(SignatureAlgorithm.HS512, key)
+                .compact();
+    }
+
     public String generateToken(UserDetails userDetails, Map<String, Object> claims){
         return createToken(claims, userDetails);
     }
@@ -37,10 +49,12 @@ public class JwtUtils {
                 .setSubject(userDetails.getUsername())
                 .claim("authorities", userDetails.getAuthorities())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)))
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1)))
                 .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
     }
+
+
 
     public boolean hasClaim(String token, String claimName){
         final Claims claims = extractAllClaims(token);
