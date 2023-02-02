@@ -30,9 +30,8 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Category> addNewCategory(@RequestBody Category company) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/companies/add").toUriString());
-        return ResponseEntity.created(uri).body(categoryService.addNewCategory(company));
+    public ResponseEntity<Category> addNewCategory(@RequestBody Category category) {
+        return ResponseEntity.ok(categoryService.addNewCategory(category));
     }
 
     @PutMapping("/{id}")
