@@ -5,18 +5,25 @@ import com.petiveriaalliacea.taza.entities.Role;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.repositories.RoleRepository;
 import com.petiveriaalliacea.taza.repositories.UserRepository;
+import com.petiveriaalliacea.taza.security.JwtUtils;
 import com.petiveriaalliacea.taza.security.PasswordEncoder;
+import com.petiveriaalliacea.taza.services.IFileService;
 import com.petiveriaalliacea.taza.services.IUserService;
+import com.petiveriaalliacea.taza.utils.Mapper;
 import com.petiveriaalliacea.taza.utils.SecurityUtils;
 import com.petiveriaalliacea.taza.utils.StringUtils;
-import com.petiveriaalliacea.taza.utils.UserObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
@@ -26,18 +33,33 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final IFileService fileService;
+    private final Mapper mapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
+    public void addPhoto(UUID photo, String token) {
+        if (!fileService.existsById(photo)) {
+            // TODO: error that file not exists
+        }
+        User user = userRepository.findByUsername(JwtUtils.getUsername(token)).orElse(null);
+        if (isNull(user)) {
+            // TODO: throw error
+        }
+        user.setPhoto(photo);
+        userRepository.save(user);
+    }
+
+    @Override
     public User register(UserRequestDto userDto) {
         boolean userExists = userRepository.findByUsername(userDto.getUsername()).isPresent();
-        if(userExists){
+        if (userExists) {
             throw new IllegalStateException("User with this username already exists!");
         }
         String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(userDto.getPassword());
-        User user = UserObjectMapper.convertToUserDto(userDto);
+        User user = mapper.toUser(userDto);
         user.setPassword(encodedPassword);
 
 //        Collection<Role> role = Collections.singleton(roleRepository.getById(1L));
@@ -68,12 +90,13 @@ public class UserService implements IUserService {
     @Override
     public String deleteUser() {
         Optional<User> user = userRepository.findByUsername(SecurityUtils.getCurrentUserLogin());
-        if(userRepository.findById(user.get().getId()).isPresent()) {
+        if (userRepository.findById(user.get().getId()).isPresent()) {
             userRepository.deleteById(user.get().getId());
             return "User deleted Successfully!";
         }
         return "User not found!";
     }
+
     @Override
     public String editUser(UserRequestDto dto) {
         Optional<User> user = userRepository.findByUsername(SecurityUtils.getCurrentUserLogin());
@@ -96,8 +119,7 @@ public class UserService implements IUserService {
             }
             userRepository.save(user.get());
             return "Updated successfully!";
-        }
-        else {
+        } else {
             return "User does not exist!";
         }
     }
@@ -105,7 +127,7 @@ public class UserService implements IUserService {
     @Override
     public User getUser() {
         Optional<User> user = userRepository.findByUsername(SecurityUtils.getCurrentUserLogin());
-        if(user.isPresent())  return user.get();
+        if (user.isPresent()) return user.get();
         else throw new IllegalStateException("User with this username already exists!");
     }
 
@@ -117,8 +139,7 @@ public class UserService implements IUserService {
             user.get().setRoles(Arrays.asList(roleRepository.findByName("ROLE_ADMIN")));
             userRepository.save(user.get());
             return "Admin role added to the user " + id;
-        }
-        else
+        } else
             return "Adding admin role failed! User does not exist.";
     }
 //    @Override
@@ -139,13 +160,11 @@ public class UserService implements IUserService {
 //    }
 
 
-
 //    @Override
 //    public User getUser(String username) {
 ////        log.info("Fetching the user {}", username);
 //        return userRepository.findByUsername(username);
 //    }
-
 
 
 }

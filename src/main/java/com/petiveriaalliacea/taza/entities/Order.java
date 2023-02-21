@@ -1,25 +1,21 @@
 package com.petiveriaalliacea.taza.entities;
 
+import com.petiveriaalliacea.taza.entities.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
+import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+@Table(name = DATABASE_PREFIX + "order")
 @Entity
-@Table(name = "orders")
-@Data
-@Builder
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-public class Order {
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+@AllArgsConstructor
+public class Order extends BaseEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_service_id", referencedColumnName = "id")
     private CompanyService companyService;

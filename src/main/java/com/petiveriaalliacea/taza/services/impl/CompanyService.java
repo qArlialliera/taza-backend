@@ -3,10 +3,10 @@ package com.petiveriaalliacea.taza.services.impl;
 import com.petiveriaalliacea.taza.dto.CompanyRequestDto;
 import com.petiveriaalliacea.taza.entities.Category;
 import com.petiveriaalliacea.taza.entities.Company;
-import com.petiveriaalliacea.taza.mappers.CompanyMapper;
 import com.petiveriaalliacea.taza.repositories.CategoryRepository;
 import com.petiveriaalliacea.taza.repositories.CompanyRepository;
 import com.petiveriaalliacea.taza.services.ICompanyService;
+import com.petiveriaalliacea.taza.utils.Mapper;
 import com.petiveriaalliacea.taza.utils.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +25,8 @@ import java.util.Optional;
 public class CompanyService implements ICompanyService {
     private final CategoryRepository categoryRepository;
     private final CompanyRepository companyRepository;
+    private final Mapper mapper;
+
     @Override
     public List<Company> getCompanies() {
         return companyRepository.findAll();
@@ -39,7 +41,7 @@ public class CompanyService implements ICompanyService {
 //        for (Category category : companyDto.getCategories()){
 //            categories.add(categoryRepository.findByName(category));
 //        }
-        Company company = CompanyMapper.convertCompanyDto(companyDto);
+        Company company = mapper.toCompany(companyDto);
         company.setCategories(companyDto.getCategories());
 
         return companyRepository.save(company);

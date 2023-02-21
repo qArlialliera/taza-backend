@@ -12,13 +12,16 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
+import static com.petiveriaalliacea.taza.utils.Constants.PRIVATE_API_ENDPOINT;
+
 @RestController
-@RequestMapping("/api/v1/services")
+@RequestMapping(PRIVATE_API_ENDPOINT + "/services")
 @RequiredArgsConstructor
 @CrossOrigin(allowedHeaders = "*", origins = "*")
-
 public class CompanyServiceController {
+
     private final CompanyServiceService compService;
+
     @GetMapping("/company/{id}")
     public ResponseEntity<List<Category>> getCompanyServices(@PathVariable Long id){
         return ResponseEntity.ok(compService.getCompanyServices(id));

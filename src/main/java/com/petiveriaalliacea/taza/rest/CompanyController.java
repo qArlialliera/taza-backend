@@ -11,12 +11,16 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static com.petiveriaalliacea.taza.utils.Constants.PRIVATE_API_ENDPOINT;
+
 @RestController
-@RequestMapping("/api/v1/companies")
+@RequestMapping(PRIVATE_API_ENDPOINT + "/companies")
 @RequiredArgsConstructor
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 public class CompanyController {
+
     private final CompanyService companyService;
+
     @GetMapping("/all")
     public ResponseEntity<List<Company>> getAllCompanies(){
         return ResponseEntity.ok().body(companyService.getCompanies());

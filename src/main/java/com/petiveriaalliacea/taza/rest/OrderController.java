@@ -11,8 +11,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static com.petiveriaalliacea.taza.utils.Constants.PRIVATE_API_ENDPOINT;
+
 @RestController
-@RequestMapping("/api/v1/orders")
+@RequestMapping(PRIVATE_API_ENDPOINT + "/orders")
 @RequiredArgsConstructor
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 public class OrderController {

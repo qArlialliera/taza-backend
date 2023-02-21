@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.security;
 
+import com.petiveriaalliacea.taza.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,9 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
+import static com.petiveriaalliacea.taza.utils.Constants.PRIVATE_API_ENDPOINT;
+import static com.petiveriaalliacea.taza.utils.Constants.PUBLIC_API_ENDPOINT;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -36,23 +40,25 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .authenticationProvider(authenticationProvider())
                 .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll()
-                .and()
-                .authenticationProvider(authenticationProvider())
-                .authorizeHttpRequests().requestMatchers("/api/v1/companies/**").hasRole("ADMIN")
-                .anyRequest().authenticated();
+                .authorizeHttpRequests().requestMatchers(PUBLIC_API_ENDPOINT + "/**").permitAll()
+                .and().authorizeHttpRequests().requestMatchers("/swagger-ui.html").permitAll() // swagger API URLs
+                .and().authorizeHttpRequests().requestMatchers("/v3/api-docs/**").permitAll()
+                .and().authorizeHttpRequests().requestMatchers("/swagger-ui/**").permitAll()
+                .and().authorizeHttpRequests().requestMatchers(PRIVATE_API_ENDPOINT + "/**").authenticated()
+                .and().authorizeHttpRequests().requestMatchers("/private/companies/**").hasRole("ADMIN")
+                .anyRequest().denyAll();
 
 
         return http.build();
     }
-
 
 
     @Bean

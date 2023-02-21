@@ -3,6 +3,7 @@ package com.petiveriaalliacea.taza.services.impl;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserDetailsServiceImp implements UserDetailsService {
 
     private final UserRepository userRepository;

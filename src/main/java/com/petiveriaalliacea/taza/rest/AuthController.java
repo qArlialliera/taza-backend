@@ -27,20 +27,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+import static com.petiveriaalliacea.taza.utils.Constants.PUBLIC_API_ENDPOINT;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Data
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping( PUBLIC_API_ENDPOINT + "/auth")
 @RequiredArgsConstructor
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 public class AuthController {
-
-    @Autowired
+    // no need for autowired when they are final and @RequiredArgsConstructor is present
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
-    @Autowired
     private final UserService userService;
 
     @PostMapping("/login")

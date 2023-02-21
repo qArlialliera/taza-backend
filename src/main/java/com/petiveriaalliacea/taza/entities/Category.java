@@ -1,19 +1,18 @@
 package com.petiveriaalliacea.taza.entities;
 
+import com.petiveriaalliacea.taza.entities.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+@Table(name = DATABASE_PREFIX + "category")
 @Entity
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-public class Category {
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+@AllArgsConstructor
+public class Category extends BaseEntity<Long> {
     private String name;
 }

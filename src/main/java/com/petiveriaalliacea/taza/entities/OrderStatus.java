@@ -1,25 +1,22 @@
 package com.petiveriaalliacea.taza.entities;
 
+import com.petiveriaalliacea.taza.entities.base.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Table;
+import lombok.*;
 
+import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+@Table(name = DATABASE_PREFIX + "order_status")
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-public class OrderStatus {
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
-
+@AllArgsConstructor
+public class OrderStatus extends BaseEntity<Long> {
     private String name;
 
 }
