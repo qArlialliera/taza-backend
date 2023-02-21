@@ -17,9 +17,14 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompanyService extends BaseEntity<Long> {
-    private Long categoryId;
 
-    private Long companyId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private Company company;
 
     private BigDecimal price;
 

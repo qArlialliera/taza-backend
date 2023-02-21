@@ -32,7 +32,7 @@ public class CompanyServiceService implements ICompanyServiceService {
         List<Category> categories = new ArrayList<>();
         if (companyServices.isPresent()) {
             for (CompanyService service : companyServices.get()){
-                categories.add(categoryRepository.findById(service.getCategoryId()).get());
+                categories.add(categoryRepository.findById(service.getCategory().getId()).get());
             }
         }
         return categories;
@@ -45,7 +45,7 @@ public class CompanyServiceService implements ICompanyServiceService {
 
     @Override
     public CompanyService addNewService(CompanyService companyService) {
-        if(companyRepository.findById(companyService.getCategoryId()).isPresent())
+        if(companyRepository.findById(companyService.getCompany().getId()).isPresent())
             return companyServiceRepository.save(companyService);
         return companyService;
     }

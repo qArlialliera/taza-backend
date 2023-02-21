@@ -16,7 +16,8 @@ import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class File {
+public class
+File {
     @Id
     private UUID id;
     private String name;
