@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.entities;
 
+import com.petiveriaalliacea.taza.entities.base.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
