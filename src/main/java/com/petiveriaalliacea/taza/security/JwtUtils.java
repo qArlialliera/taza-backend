@@ -23,7 +23,11 @@ public class JwtUtils {
     private final static String key = "UEBReVMyNFQoMg==KUlDJWM2NHtTQihndz5WNQ==dyg+TXksOjpLM2NcajV4cGhrNC8yKCQ3LnBKXThkLilvIXhbdUYoUEt6LXk=";
 
     public static String getUsername(String token) {
-        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token.substring(7))
+                .getBody()
+                .getSubject();
     }
 
 

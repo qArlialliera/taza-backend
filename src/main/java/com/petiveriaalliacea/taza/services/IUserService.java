@@ -16,4 +16,5 @@ public interface IUserService {
     String editUser(UserRequestDto user);
     User getUser();
     void addPhoto(UUID photo, String token);
+    UUID getPhoto (String token);
 }

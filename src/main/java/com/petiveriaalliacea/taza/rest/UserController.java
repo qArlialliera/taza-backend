@@ -5,6 +5,8 @@ import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.entities.Role;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.services.impl.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -58,10 +60,15 @@ public class UserController {
         return ResponseEntity.ok(userService.addAdminRole(id));
     }
 
-    @PutMapping("/user/photo/upload/{uuid}")
+    @PutMapping("/photo/upload/{uuid}")
     public void uploadPhoto(@PathVariable("uuid") UUID photo,
-                            @RequestHeader("Authorization") String token) {
+                            @RequestHeader("Authorization") @Parameter(hidden = true) String token) {
         userService.addPhoto(photo, token);
+    }
+
+    @GetMapping("/photo/get")
+    public ResponseEntity<UUID> getPhoto(@RequestHeader("Authorization") @Parameter(hidden = true) String token) {
+        return ResponseEntity.ok(userService.getPhoto(token));
     }
 }
 

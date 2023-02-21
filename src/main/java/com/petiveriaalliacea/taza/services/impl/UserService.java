@@ -53,6 +53,15 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public UUID getPhoto(String token) {
+        User user = userRepository.findByUsername(JwtUtils.getUsername(token)).orElse(null);
+        if (isNull(user)) {
+            // TODO: throw error
+        }
+        return user.getPhoto();
+    }
+
+    @Override
     public User register(UserRequestDto userDto) {
         boolean userExists = userRepository.findByUsername(userDto.getUsername()).isPresent();
         if (userExists) {
