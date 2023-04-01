@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Table(name = DATABASE_PREFIX + "category")
 @Entity

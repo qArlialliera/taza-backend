@@ -74,6 +74,9 @@ public class CompanyService implements ICompanyService {
             if (!StringUtils.isEmpty(dto.getPhoneNumber())) {
                 company.get().setPhoneNumber(dto.getPhoneNumber());
             }
+            if (!(dto.getCategories()).isEmpty()) {
+                company.get().setCategories(dto.getCategories());
+            }
         }
         return companyRepository.save(company.get());
 

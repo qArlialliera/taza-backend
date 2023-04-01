@@ -12,4 +12,6 @@ public interface Mapper {
     User toUser(UserRequestDto dto);
 
     Company toCompany(CompanyRequestDto dto);
+
+
 }
