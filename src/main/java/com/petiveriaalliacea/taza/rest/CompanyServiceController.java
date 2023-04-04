@@ -23,7 +23,7 @@ public class CompanyServiceController {
     private final CompanyServiceService compService;
 
     @GetMapping("/company/{id}")
-    public ResponseEntity<List<Category>> getCompanyServices(@PathVariable Long id){
+    public ResponseEntity<List<CompanyService>> getCompanyServices(@PathVariable Long id){
         return ResponseEntity.ok(compService.getCompanyServices(id));
     }
     @GetMapping("/{id}")

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface ICompanyServiceService {
-    List<Category> getCompanyServices(Long id);
+    List<CompanyService> getCompanyServices(Long id);
 
     BigDecimal getPrice(Long id);
 

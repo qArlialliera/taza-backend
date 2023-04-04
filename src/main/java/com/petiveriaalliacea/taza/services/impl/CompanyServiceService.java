@@ -27,15 +27,14 @@ public class CompanyServiceService implements ICompanyServiceService {
     private final CompanyServiceRepository companyServiceRepository;
 
     @Override
-    public List<Category> getCompanyServices(Long companyId) {
-        Optional<List<CompanyService>> companyServices = companyServiceRepository.findByCompanyId(companyId);
-        List<Category> categories = new ArrayList<>();
-        if (companyServices.isPresent()) {
-            for (CompanyService service : companyServices.get()){
-                categories.add(categoryRepository.findById(service.getCategory().getId()).get());
+    public List<CompanyService> getCompanyServices(Long companyId) {
+        List<CompanyService> companyServices = companyServiceRepository.findAll();
+        for(CompanyService service : companyServices){
+            if(service.getCompany().getId() != companyId){
+                companyServices.remove(service);
             }
         }
-        return categories;
+        return companyServices;
     }
 
     @Override
