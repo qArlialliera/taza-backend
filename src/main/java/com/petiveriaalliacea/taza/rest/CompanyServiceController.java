@@ -26,7 +26,7 @@ public class CompanyServiceController {
     public ResponseEntity<List<CompanyService>> getCompanyServices(@PathVariable Long id){
         return ResponseEntity.ok(compService.getCompanyServices(id));
     }
-    @GetMapping("/{id}")
+    @GetMapping("/all")
     public ResponseEntity<List<CompanyService>> getServices(){
         return ResponseEntity.ok(compService.getServices());
     }

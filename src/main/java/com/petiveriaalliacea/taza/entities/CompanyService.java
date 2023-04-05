@@ -5,9 +5,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Currency;
 
 import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Table(name = DATABASE_PREFIX + "company_service")
@@ -18,13 +21,11 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 public class CompanyService extends BaseEntity<Long> {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
+    @ManyToMany(fetch = EAGER)
+    private Collection<Category> categories = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id", referencedColumnName = "id")
-    private Company company;
+    @ManyToMany(fetch = EAGER)
+    private Collection<Company> company = new ArrayList<>();
 
     private BigDecimal price;
 

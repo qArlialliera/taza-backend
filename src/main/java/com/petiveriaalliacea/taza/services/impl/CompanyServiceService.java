@@ -1,6 +1,6 @@
 package com.petiveriaalliacea.taza.services.impl;
 
-import com.petiveriaalliacea.taza.entities.Category;
+import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.entities.CompanyService;
 import com.petiveriaalliacea.taza.repositories.CategoryRepository;
 import com.petiveriaalliacea.taza.repositories.CompanyRepository;
@@ -30,10 +30,10 @@ public class CompanyServiceService implements ICompanyServiceService {
     public List<CompanyService> getCompanyServices(Long companyId) {
         List<CompanyService> companyServices = companyServiceRepository.findAll();
         List<CompanyService> responseServices = new ArrayList<>();
+        Optional<Company> company = companyRepository.findById(companyId);
         for(CompanyService service : companyServices){
-            if(service.getCompany().getId() == companyId){
+            if(service.getCompany() == company.get())
                 responseServices.add(service);
-            }
         }
         return responseServices;
     }
@@ -50,9 +50,7 @@ public class CompanyServiceService implements ICompanyServiceService {
 
     @Override
     public CompanyService addNewService(CompanyService companyService) {
-        if(companyRepository.findById(companyService.getCompany().getId()).isPresent())
-            return companyServiceRepository.save(companyService);
-        return companyService;
+        return companyServiceRepository.save(companyService);
     }
 
     @Override
