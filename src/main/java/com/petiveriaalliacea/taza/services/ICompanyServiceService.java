@@ -10,6 +10,8 @@ import java.util.List;
 public interface ICompanyServiceService {
     List<CompanyService> getCompanyServices(Long id);
 
+    List<CompanyService> getServices();
+
     BigDecimal getPrice(Long id);
 
     CompanyService addNewService(CompanyService companyService);

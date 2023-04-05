@@ -29,12 +29,18 @@ public class CompanyServiceService implements ICompanyServiceService {
     @Override
     public List<CompanyService> getCompanyServices(Long companyId) {
         List<CompanyService> companyServices = companyServiceRepository.findAll();
+        List<CompanyService> responseServices = new ArrayList<>();
         for(CompanyService service : companyServices){
-            if(service.getCompany().getId() != companyId){
-                companyServices.remove(service);
+            if(service.getCompany().getId() == companyId){
+                responseServices.add(service);
             }
         }
-        return companyServices;
+        return responseServices;
+    }
+
+    @Override
+    public List<CompanyService> getServices() {
+        return companyServiceRepository.findAll();
     }
 
     @Override

@@ -27,6 +27,10 @@ public class CompanyServiceController {
         return ResponseEntity.ok(compService.getCompanyServices(id));
     }
     @GetMapping("/{id}")
+    public ResponseEntity<List<CompanyService>> getServices(){
+        return ResponseEntity.ok(compService.getServices());
+    }
+    @GetMapping("/price/{id}")
     public ResponseEntity<BigDecimal> getPrice(@PathVariable Long id){
         return ResponseEntity.ok(compService.getPrice(id));
     }
