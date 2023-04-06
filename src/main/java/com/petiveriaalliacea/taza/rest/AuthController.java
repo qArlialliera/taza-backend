@@ -3,6 +3,7 @@ package com.petiveriaalliacea.taza.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petiveriaalliacea.taza.dto.AuthRequestDto;
+import com.petiveriaalliacea.taza.dto.AuthResponseDto;
 import com.petiveriaalliacea.taza.dto.TokenDto;
 import com.petiveriaalliacea.taza.dto.UserRequestDto;
 import com.petiveriaalliacea.taza.entities.User;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +28,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import static com.petiveriaalliacea.taza.utils.Constants.PUBLIC_API_ENDPOINT;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -50,7 +53,8 @@ public class AuthController {
         if (authentication.isAuthenticated()){
             String accessToken = jwtUtils.generateToken(user);
             String refreshToken = jwtUtils.generateRefreshToken(user);
-            return ResponseEntity.ok(new TokenDto(accessToken, refreshToken));
+            return ResponseEntity.ok(new AuthResponseDto(accessToken, refreshToken, (Collection<SimpleGrantedAuthority>) authentication.getAuthorities()));
+
         }
         return ResponseEntity.status(400).body("Some error has occurred");
     }
