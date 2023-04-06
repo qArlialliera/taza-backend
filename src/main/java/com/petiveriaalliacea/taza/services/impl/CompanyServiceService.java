@@ -30,10 +30,11 @@ public class CompanyServiceService implements ICompanyServiceService {
     public List<CompanyService> getCompanyServices(Long companyId) {
         List<CompanyService> companyServices = companyServiceRepository.findAll();
         List<CompanyService> responseServices = new ArrayList<>();
-        Optional<Company> company = companyRepository.findById(companyId);
+        Company company = companyRepository.findById(companyId).get();
         for(CompanyService service : companyServices){
-            if(service.getCompany() == company.get())
-                responseServices.add(service);
+            for(Company companies : service.getCompany())
+                if(companies.getId() == company.getId())
+                    responseServices.add(service);
         }
         return responseServices;
     }
