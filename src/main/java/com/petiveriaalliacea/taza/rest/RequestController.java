@@ -20,24 +20,24 @@ public class RequestController {
     private final RequestService requestService;
     
     @GetMapping("/all")
-    public ResponseEntity<List<RequestDto>> getAllCompanies(){
+    public ResponseEntity<List<RequestDto>> getRequests(){
         return ResponseEntity.ok().body(requestService.getRequests());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<RequestDto> getCompany(@PathVariable Long id){
+    public ResponseEntity<RequestDto> getRequest(@PathVariable Long id){
         return ResponseEntity.ok(requestService.getRequest(id));
     }
     @PostMapping("/add")
-    public ResponseEntity<RequestDto> addNewCompany(@RequestBody RequestDto requestDto){
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/companies/add").toUriString());
+    public ResponseEntity<RequestDto> addNewRequest(@RequestBody RequestDto requestDto){
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/requests/add").toUriString());
         return ResponseEntity.created(uri).body(requestService.addNewRequest(requestDto));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<RequestDto> editCompany(@RequestBody RequestDto request, @PathVariable Long id){
+    public ResponseEntity<RequestDto> editRequest(@RequestBody RequestDto request, @PathVariable Long id){
         return ResponseEntity.ok(requestService.editRequest(id, request));
     }
     @DeleteMapping("/{id}")
-    private ResponseEntity deleteCompany(@PathVariable Long id) {
+    private ResponseEntity deleteRequest(@PathVariable Long id) {
         return ResponseEntity.ok(requestService.deleteRequest(id));
     }
 }

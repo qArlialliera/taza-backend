@@ -25,5 +25,8 @@ public class Company extends BaseEntity<Long> {
     private String address;
     @ManyToMany(fetch = EAGER)
     private Collection<Category> categories = new ArrayList<>();
+    @OneToMany(mappedBy = "company")
+    private Collection<Review> reviews = new ArrayList<>();
+
 
 }
