@@ -5,6 +5,7 @@ import com.petiveriaalliacea.taza.entities.Category;
 import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.repositories.CategoryRepository;
 import com.petiveriaalliacea.taza.repositories.CompanyRepository;
+import com.petiveriaalliacea.taza.repositories.CompanyServiceRepository;
 import com.petiveriaalliacea.taza.services.ICompanyService;
 import com.petiveriaalliacea.taza.utils.Mapper;
 import com.petiveriaalliacea.taza.utils.StringUtils;
@@ -25,6 +26,7 @@ import java.util.Optional;
 public class CompanyService implements ICompanyService {
     private final CategoryRepository categoryRepository;
     private final CompanyRepository companyRepository;
+    private final CompanyServiceRepository companyServiceRepository;
     private final Mapper mapper;
 
     @Override
@@ -35,6 +37,23 @@ public class CompanyService implements ICompanyService {
     public Company getCompany(Long id) {
         return companyRepository.findById(id).get();
     }
+
+    @Override
+    public List<Company> getCompaniesByCategory(Long id) {
+        List<Company> companies = new ArrayList<>();
+        Category category = categoryRepository.findById(id).get();
+
+        List<com.petiveriaalliacea.taza.entities.CompanyService> companyServices = companyServiceRepository.findCompanyServiceByCategories(category).get();
+
+        for (com.petiveriaalliacea.taza.entities.CompanyService service : companyServices){
+            for(Company company : service.getCompany()){
+                companies.add(company);
+            }
+        }
+
+        return companies;
+    }
+
     @Override
     public Company addNewCompany(CompanyRequestDto companyDto){
 //        Collection<Category> categories = new ArrayList<>();

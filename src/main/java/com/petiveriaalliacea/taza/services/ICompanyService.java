@@ -9,6 +9,8 @@ public interface ICompanyService {
     List<Company> getCompanies();
     Company getCompany(Long id);
 
+    List<Company> getCompaniesByCategory(Long id);
+
     Company addNewCompany(CompanyRequestDto companyDto);
 
     Company editCompany(Long id, Company company);

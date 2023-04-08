@@ -29,6 +29,10 @@ public class CompanyController {
     public ResponseEntity<Company> getCompany(@PathVariable Long id){
         return ResponseEntity.ok(companyService.getCompany(id));
     }
+    @GetMapping("category/{id}")
+    public ResponseEntity<List<Company>> getCompaniesByCategory(@PathVariable Long id){
+        return ResponseEntity.ok(companyService.getCompaniesByCategory(id));
+    }
     @PostMapping("/add")
     public ResponseEntity<Company> addNewCompany(@RequestBody CompanyRequestDto companyDto){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/companies/add").toUriString());
