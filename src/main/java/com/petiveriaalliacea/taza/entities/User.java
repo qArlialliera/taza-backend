@@ -32,5 +32,7 @@ public class User extends BaseEntity<Long> {
     private Collection<Role> roles = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private Collection<Review> reviews = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private Collection<Order> orders = new ArrayList<>();
 
 }

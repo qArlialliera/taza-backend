@@ -1,5 +1,7 @@
 package com.petiveriaalliacea.taza.rest;
 
+import com.petiveriaalliacea.taza.dto.OrderDto;
+import com.petiveriaalliacea.taza.dto.RequestDto;
 import com.petiveriaalliacea.taza.entities.Category;
 import com.petiveriaalliacea.taza.entities.Order;
 import com.petiveriaalliacea.taza.services.impl.OrderService;
@@ -35,20 +37,21 @@ public class OrderController {
     public ResponseEntity<Order> addNewOrder(@RequestBody Order order) {
         return ResponseEntity.ok(orderService.addNewOrder(order));
     }
-
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderDto> editOrder(@RequestBody OrderDto orderDto, @PathVariable Long id){
+        return ResponseEntity.ok(orderService.editOrder(id, orderDto));
+    }
     @DeleteMapping("/{id}")
     private ResponseEntity deleteOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.deleteOrder(id));
     }
+    @GetMapping("user/{id}")
+    public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
+        return ResponseEntity.ok(orderService.getUserOrders(userId));
+    }
 
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
-//        return ResponseEntity.ok(orderService.getUserOrders(userId));
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<List<Order>> getCompanyOrders(@PathVariable Long companyId) {
-//        return ResponseEntity.ok(orderService.getCompanyOrders(companyId));
-//    }
+    @GetMapping("company/{id}")
+    public ResponseEntity<List<Order>> getCompanyOrders(@PathVariable Long companyId) {
+        return ResponseEntity.ok(orderService.getCompanyOrders(companyId));
+    }
 }

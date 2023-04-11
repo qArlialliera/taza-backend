@@ -10,6 +10,7 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 public class ReviewDto {
+    private Long id;
     private User user;
     private Company company;
     private String comment;

@@ -12,6 +12,7 @@ import java.util.Collection;
 @EqualsAndHashCode
 @ToString
 public class RequestDto {
+    private Long id;
     private String name;
     private String email;
     private String phoneNumber;

@@ -7,11 +7,8 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Currency;
-
 import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
 import static jakarta.persistence.FetchType.EAGER;
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Table(name = DATABASE_PREFIX + "company_service")
 @Entity
@@ -29,5 +26,9 @@ public class CompanyService extends BaseEntity<Long> {
 
     private BigDecimal price;
 
+    private boolean isAdditionalService;
+
+    @OneToMany(mappedBy = "companyService")
+    private Collection<Order> orders = new ArrayList<>();
 
 }
