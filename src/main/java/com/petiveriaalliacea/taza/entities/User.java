@@ -26,6 +26,7 @@ public class User extends BaseEntity<Long> {
     private String email;
     private String city;
     private String address;
+    private String phoneNumber;
     private UUID photo;
     @ManyToMany(fetch = EAGER)
     @JsonIgnore

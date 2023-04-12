@@ -9,7 +9,6 @@ import com.petiveriaalliacea.taza.entities.Order;
 import com.petiveriaalliacea.taza.entities.Review;
 import com.petiveriaalliacea.taza.entities.User;
 import org.mapstruct.InjectionStrategy;
-import org.mapstruct.factory.Mappers;
 
 @org.mapstruct.Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface Mapper {
