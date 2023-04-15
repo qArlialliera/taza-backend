@@ -4,6 +4,7 @@ import com.petiveriaalliacea.taza.dto.CompanyRequestDto;
 import com.petiveriaalliacea.taza.entities.Company;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ICompanyService {
     List<Company> getCompanies();
@@ -16,4 +17,7 @@ public interface ICompanyService {
     Company editCompany(Long id, Company company);
     String deleteCompany(Long id);
 
+    void addPhoto(Long companyId, UUID photo);
+
+    UUID getPhoto(Long companyId);
 }

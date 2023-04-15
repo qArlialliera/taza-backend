@@ -7,6 +7,7 @@ import com.petiveriaalliacea.taza.repositories.CategoryRepository;
 import com.petiveriaalliacea.taza.repositories.CompanyRepository;
 import com.petiveriaalliacea.taza.repositories.CompanyServiceRepository;
 import com.petiveriaalliacea.taza.services.ICompanyService;
+import com.petiveriaalliacea.taza.services.IFileService;
 import com.petiveriaalliacea.taza.utils.Mapper;
 import com.petiveriaalliacea.taza.utils.StringUtils;
 import jakarta.transaction.Transactional;
@@ -14,10 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +27,7 @@ public class CompanyService implements ICompanyService {
     private final CategoryRepository categoryRepository;
     private final CompanyRepository companyRepository;
     private final CompanyServiceRepository companyServiceRepository;
+    private final IFileService fileService;
     private final Mapper mapper;
 
     @Override
@@ -108,4 +109,27 @@ public class CompanyService implements ICompanyService {
         }
         return "Company not found!";
     }
+
+    @Override
+    public void addPhoto(Long companyId, UUID photo) {
+        if (!fileService.existsById(photo)) {
+            // TODO: error that file not exists
+        }
+        Company company = companyRepository.findById(companyId).orElse(null);
+        if (isNull(company)) {
+            // TODO: throw error
+        }
+        company.setPhoto(photo);
+        companyRepository.save(company);
+    }
+
+    @Override
+    public UUID getPhoto(Long companyId) {
+        Company company = companyRepository.findById(companyId).orElse(null);
+        if (isNull(company)) {
+            // TODO: throw error
+        }
+        return company.getPhoto();
+    }
+
 }

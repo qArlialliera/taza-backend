@@ -10,6 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 import static com.petiveriaalliacea.taza.utils.Constants.PRIVATE_API_ENDPOINT;
 
@@ -46,6 +47,14 @@ public class CompanyController {
     private ResponseEntity deleteCompany(@PathVariable Long id){
         return ResponseEntity.ok(companyService.deleteCompany(id));
     }
+    @PutMapping("/photo/upload/{id}/{uuid}")
+    public void uploadPhoto(@PathVariable("id") Long id, @PathVariable("uuid") UUID photo) {
+        companyService.addPhoto(id, photo);
+    }
 
+    @GetMapping("/photo/get/{id}")
+    public ResponseEntity<UUID> getPhoto(@PathVariable Long id) {
+        return ResponseEntity.ok(companyService.getPhoto(id));
+    }
 
 }
