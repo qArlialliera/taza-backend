@@ -21,17 +21,14 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order extends BaseEntity<Long> {
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "company_service_id", referencedColumnName = "id")
     private CompanyService companyService;
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     private Date date;
     private String address;
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_status_id", referencedColumnName = "id")
     private OrderStatus status;
