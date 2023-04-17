@@ -28,7 +28,7 @@ public class ReviewService implements IReviewService {
         List<Review> reviews = reviewRepository.findAll();
         List<ReviewDto> reviewsDtos = reviews
                 .stream()
-                .map(review -> mapper.toReviewDto(review))
+                .map(mapper::toReviewDto)
                 .collect(Collectors.toList());
         return reviewsDtos;
     }

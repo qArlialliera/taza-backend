@@ -1,6 +1,7 @@
 package com.petiveriaalliacea.taza.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petiveriaalliacea.taza.entities.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,6 +34,7 @@ public class User extends BaseEntity<Long> {
     private Collection<Role> roles = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private Collection<Review> reviews = new ArrayList<>();
+    @JsonManagedReference(value="user_order")
     @OneToMany(mappedBy = "user")
     private Collection<Order> orders = new ArrayList<>();
 

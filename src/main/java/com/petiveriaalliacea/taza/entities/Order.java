@@ -19,17 +19,17 @@ import static jakarta.persistence.FetchType.EAGER;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order extends BaseEntity<Long> {
-    @JsonBackReference
+    @JsonBackReference(value="company_service_order")
     @ManyToOne
     @JoinColumn(name = "company_service_id", referencedColumnName = "id")
     private CompanyService companyService;
-    @JsonBackReference
+    @JsonBackReference(value="user_order")
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     private Date date;
     private String address;
-    @JsonBackReference
+    @JsonBackReference(value="status_order")
     @ManyToOne
     @JoinColumn(name = "order_status_id", referencedColumnName = "id")
     private OrderStatus status;

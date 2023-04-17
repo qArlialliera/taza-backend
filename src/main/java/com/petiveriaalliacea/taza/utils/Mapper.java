@@ -10,6 +10,7 @@ import com.petiveriaalliacea.taza.entities.Review;
 import com.petiveriaalliacea.taza.entities.User;
 import org.mapstruct.InjectionStrategy;
 
+
 @org.mapstruct.Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface Mapper {
     User toUser(UserRequestDto dto);

@@ -121,7 +121,7 @@ public class UserService implements IUserService {
                 user.get().setAddress(dto.getAddress());
             }
             if (!StringUtils.isEmpty(dto.getEmail())) {
-                user.get().setEmail(dto.getAddress());
+                user.get().setEmail(dto.getEmail());
             }
             if (!StringUtils.isEmpty(dto.getFullName())) {
                 user.get().setFullName(dto.getFullName());
@@ -151,29 +151,4 @@ public class UserService implements IUserService {
         } else
             return "Adding admin role failed! User does not exist.";
     }
-//    @Override
-//    public User editUser(Long id, User user) {
-//        return userRepository.findById(id).map(
-//                userEdit -> {
-//                    userEdit.setUsername(user.getUsername());
-//                    userEdit.setFullName(user.getFullName());
-//                    userEdit.setEmail(user.getEmail());
-//                    userEdit.setAddress(user.getAddress());
-//                    userEdit.setCity(user.getCity());
-//                    return userRepository.save(userEdit);
-//                }
-//        ).orElseGet(() -> {
-//            user.setId(id);
-//            return userRepository.save(user);
-//        });
-//    }
-
-
-//    @Override
-//    public User getUser(String username) {
-////        log.info("Fetching the user {}", username);
-//        return userRepository.findByUsername(username);
-//    }
-
-
 }

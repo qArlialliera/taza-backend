@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petiveriaalliacea.taza.entities.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,7 @@ public class CompanyService extends BaseEntity<Long> {
 
     private boolean isAdditionalService;
 
+    @JsonManagedReference(value="company_service_order")
     @OneToMany(mappedBy = "companyService")
     private Collection<Order> orders = new ArrayList<>();
 

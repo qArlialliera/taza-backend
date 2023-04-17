@@ -1,7 +1,6 @@
 package com.petiveriaalliacea.taza.rest;
 
 import com.petiveriaalliacea.taza.dto.ReviewDto;
-import com.petiveriaalliacea.taza.services.impl.RequestService;
 import com.petiveriaalliacea.taza.services.impl.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,13 +37,13 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getRatingOfCompany(id));
     }
     @PostMapping("/add")
-    public ResponseEntity<ReviewDto> addNewReview(@RequestBody ReviewDto requestDto){
+    public ResponseEntity<ReviewDto> addNewReview(@RequestBody ReviewDto reviewDtoDto){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/reviews/add").toUriString());
-        return ResponseEntity.created(uri).body(reviewService.addNewReview(requestDto));
+        return ResponseEntity.created(uri).body(reviewService.addNewReview(reviewDtoDto));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ReviewDto> editReview(@RequestBody ReviewDto request, @PathVariable Long id){
-        return ResponseEntity.ok(reviewService.editReview(id, request));
+    public ResponseEntity<ReviewDto> editReview(@RequestBody ReviewDto reviewDtoDto, @PathVariable Long id){
+        return ResponseEntity.ok(reviewService.editReview(id, reviewDtoDto));
     }
     @DeleteMapping("/{id}")
     private ResponseEntity deleteReview(@PathVariable Long id) {
