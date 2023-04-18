@@ -19,5 +19,4 @@ public class UserRequestDto {
     private String city;
     private String address;
     private String phoneNumber;
-    private Collection<Role> roles;
 }

@@ -54,6 +54,7 @@ public class SecurityConfig {
                 .and().authorizeHttpRequests().requestMatchers("/swagger-ui/**").permitAll()
                 .and().authorizeHttpRequests().requestMatchers(PRIVATE_API_ENDPOINT + "/**").authenticated()
                 .and().authorizeHttpRequests().requestMatchers("/private/companies/**").hasRole("ADMIN")
+                .and().authorizeHttpRequests().requestMatchers("/private/companies/**").hasRole("COMPANY")
                 .anyRequest().denyAll();
 
 

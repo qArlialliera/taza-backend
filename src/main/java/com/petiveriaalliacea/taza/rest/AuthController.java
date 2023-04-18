@@ -86,6 +86,11 @@ public class AuthController {
         return ResponseEntity.ok().body(userService.register(user));
     }
 
+    @PostMapping("/register/company-representative")
+    public ResponseEntity<User> registerCompanyRepresentative(@RequestBody UserRequestDto user){
+        return ResponseEntity.ok().body(userService.registerCompanyRepresentative(user));
+    }
+
     protected boolean canEqual(final Object other) {
         return other instanceof AuthController;
     }

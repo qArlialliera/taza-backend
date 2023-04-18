@@ -9,6 +9,9 @@ import java.util.UUID;
 
 public interface IUserService {
     User register(UserRequestDto userDto);
+
+    User registerCompanyRepresentative(UserRequestDto userDto);
+
     Role addRole(Role role);
     String addAdminRole(Long id);
     List<User> getUsers();

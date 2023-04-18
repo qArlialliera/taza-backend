@@ -70,18 +70,20 @@ public class UserService implements IUserService {
         String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(userDto.getPassword());
         User user = mapper.toUser(userDto);
         user.setPassword(encodedPassword);
-
-//        Collection<Role> role = Collections.singleton(roleRepository.getById(1L));
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+        return userRepository.save(user);
+    }
 
-//        User user1 = User.builder()
-//                .username(userDto.getUsername())
-//                .password(encodedPassword)
-//                .email(userDto.getEmail())
-//                .city(userDto.getCity())
-//                .role(roleRepository.getById(1L))
-//                .isActivated(false)
-//                .build();
+    @Override
+    public User registerCompanyRepresentative(UserRequestDto userDto) {
+        boolean userExists = userRepository.findByUsername(userDto.getUsername()).isPresent();
+        if (userExists) {
+            throw new IllegalStateException("User with this username already exists!");
+        }
+        String encodedPassword = passwordEncoder.bCryptPasswordEncoder().encode(userDto.getPassword());
+        User user = mapper.toUser(userDto);
+        user.setPassword(encodedPassword);
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_COMPANY")));
         return userRepository.save(user);
     }
 
