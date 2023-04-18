@@ -89,12 +89,4 @@ public class SecurityConfig {
         return new CorsFilter(source);
     }
 
-//    public UserDetailsServiceImp userDetailsService(){
-//        return new UserDetailsServiceImp() {
-//            @Override
-//            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//                return ;
-//            }
-//        }
-//    }
 }

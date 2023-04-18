@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.services;
 
+import com.petiveriaalliacea.taza.dto.CompanyDto;
 import com.petiveriaalliacea.taza.dto.CompanyRequestDto;
 import com.petiveriaalliacea.taza.entities.Company;
 
@@ -7,14 +8,19 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ICompanyService {
-    List<Company> getCompanies();
-    Company getCompany(Long id);
+    List<CompanyDto> getCompanies();
+    CompanyDto getCompany(Long id);
 
-    List<Company> getCompaniesByCategory(Long id);
+    List<CompanyDto> getCompaniesByCategory(Long id);
 
-    Company addNewCompany(CompanyRequestDto companyDto);
+    CompanyDto getUserCompany(String token);
 
-    Company editCompany(Long id, Company company);
+    boolean getUserCompanyExist(String token);
+
+    CompanyDto addNewCompany(CompanyRequestDto companyDto);
+
+    CompanyDto editCompany(Long id, CompanyDto dto);
+
     String deleteCompany(Long id);
 
     void addPhoto(Long companyId, UUID photo);

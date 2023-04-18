@@ -27,6 +27,8 @@ public class Company extends BaseEntity<Long> {
     private Collection<Category> categories = new ArrayList<>();
     @OneToMany(mappedBy = "company")
     private Collection<Review> reviews = new ArrayList<>();
-
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

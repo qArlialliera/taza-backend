@@ -1,11 +1,15 @@
 package com.petiveriaalliacea.taza.services.impl;
 
+import com.petiveriaalliacea.taza.dto.CompanyDto;
 import com.petiveriaalliacea.taza.dto.CompanyRequestDto;
 import com.petiveriaalliacea.taza.entities.Category;
 import com.petiveriaalliacea.taza.entities.Company;
+import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.repositories.CategoryRepository;
 import com.petiveriaalliacea.taza.repositories.CompanyRepository;
 import com.petiveriaalliacea.taza.repositories.CompanyServiceRepository;
+import com.petiveriaalliacea.taza.repositories.UserRepository;
+import com.petiveriaalliacea.taza.security.JwtUtils;
 import com.petiveriaalliacea.taza.services.ICompanyService;
 import com.petiveriaalliacea.taza.services.IFileService;
 import com.petiveriaalliacea.taza.utils.Mapper;
@@ -16,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -27,20 +32,24 @@ public class CompanyService implements ICompanyService {
     private final CategoryRepository categoryRepository;
     private final CompanyRepository companyRepository;
     private final CompanyServiceRepository companyServiceRepository;
+    private final UserRepository userRepository;
     private final IFileService fileService;
     private final Mapper mapper;
 
     @Override
-    public List<Company> getCompanies() {
-        return companyRepository.findAll();
+    public List<CompanyDto> getCompanies() {
+        return companyRepository.findAll()
+                .stream()
+                .map(mapper::toCompanyDto)
+                .collect(Collectors.toList());
     }
     @Override
-    public Company getCompany(Long id) {
-        return companyRepository.findById(id).get();
+    public CompanyDto getCompany(Long id) {
+        return mapper.toCompanyDto(companyRepository.findById(id).get());
     }
 
     @Override
-    public List<Company> getCompaniesByCategory(Long id) {
+    public List<CompanyDto> getCompaniesByCategory(Long id) {
         List<Company> companies = new ArrayList<>();
         Category category = categoryRepository.findById(id).get();
 
@@ -52,34 +61,36 @@ public class CompanyService implements ICompanyService {
             }
         }
 
-        return companies;
+        return companies.stream().map(mapper::toCompanyDto).collect(Collectors.toList());
     }
 
     @Override
-    public Company addNewCompany(CompanyRequestDto companyDto){
-//        Collection<Category> categories = new ArrayList<>();
-//        for (Category category : companyDto.getCategories()){
-//            categories.add(categoryRepository.findByName(category));
-//        }
+    public CompanyDto getUserCompany(String token) {
+        User user = userRepository.findByUsername(JwtUtils.getUsername(token))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
+        Optional<Company> company = companyRepository.findByUser_Id(user.getId());
+        return mapper.toCompanyDto(company.get());
+    }
+
+    @Override
+    public boolean getUserCompanyExist(String token) {
+        User user = userRepository.findByUsername(JwtUtils.getUsername(token))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
+        Optional<Company> company = companyRepository.findByUser_Id(user.getId());
+        if(company.isPresent()) return true;
+
+        return false;
+    }
+
+    @Override
+    public CompanyDto addNewCompany(CompanyRequestDto companyDto){
         Company company = mapper.toCompany(companyDto);
         company.setCategories(companyDto.getCategories());
 
-        return companyRepository.save(company);
+        return mapper.toCompanyDto(companyRepository.save(company));
     }
     @Override
-    public Company editCompany(Long id, Company dto) {
-//        return companyRepository.findById(id).map(
-//                companyEdit -> {
-//                    companyEdit.setName(company.getName());
-//                    companyEdit.setEmail(company.getEmail());
-//                    companyEdit.setAddress(company.getAddress());
-//                    companyEdit.setPhoneNumber(company.getPhoneNumber());
-//                    return companyRepository.save(companyEdit);
-//                }
-//        ).orElseGet(() -> {
-//            company.setId(id);
-//            return companyRepository.save(company);
-//        });
+    public CompanyDto editCompany(Long id, CompanyDto dto) {
         Optional<Company> company = companyRepository.findById(id);
         if(company.isPresent()){
             if (!StringUtils.isEmpty(dto.getName())) {
@@ -98,7 +109,7 @@ public class CompanyService implements ICompanyService {
                 company.get().setCategories(dto.getCategories());
             }
         }
-        return companyRepository.save(company.get());
+        return mapper.toCompanyDto(companyRepository.save(company.get()));
 
     }
     @Override
