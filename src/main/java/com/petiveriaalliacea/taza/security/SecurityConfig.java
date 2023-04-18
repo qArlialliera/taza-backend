@@ -52,6 +52,7 @@ public class SecurityConfig {
                 .and().authorizeHttpRequests().requestMatchers("/swagger-ui.html").permitAll() // swagger API URLs
                 .and().authorizeHttpRequests().requestMatchers("/v3/api-docs/**").permitAll()
                 .and().authorizeHttpRequests().requestMatchers("/swagger-ui/**").permitAll()
+                .and().authorizeHttpRequests().requestMatchers("/private/user/role/make-admin/{id}").hasRole("ADMIN")
                 .and().authorizeHttpRequests().requestMatchers(PRIVATE_API_ENDPOINT + "/**").authenticated()
                 .and().authorizeHttpRequests().requestMatchers("/private/companies/**").hasRole("ADMIN")
                 .and().authorizeHttpRequests().requestMatchers("/private/companies/**").hasRole("COMPANY")

@@ -2,10 +2,7 @@ package com.petiveriaalliacea.taza.rest;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petiveriaalliacea.taza.dto.AuthRequestDto;
-import com.petiveriaalliacea.taza.dto.AuthResponseDto;
-import com.petiveriaalliacea.taza.dto.TokenDto;
-import com.petiveriaalliacea.taza.dto.UserRequestDto;
+import com.petiveriaalliacea.taza.dto.*;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.security.JwtUtils;
 import com.petiveriaalliacea.taza.services.impl.UserService;
@@ -82,12 +79,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody UserRequestDto user){
+    public ResponseEntity<UserResponseDto> register(@RequestBody UserRequestDto user){
         return ResponseEntity.ok().body(userService.register(user));
     }
 
     @PostMapping("/register/company-representative")
-    public ResponseEntity<User> registerCompanyRepresentative(@RequestBody UserRequestDto user){
+    public ResponseEntity<UserResponseDto> registerCompanyRepresentative(@RequestBody UserRequestDto user){
         return ResponseEntity.ok().body(userService.registerCompanyRepresentative(user));
     }
 

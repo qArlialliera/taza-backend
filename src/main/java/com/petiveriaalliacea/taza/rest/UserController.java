@@ -1,23 +1,15 @@
 package com.petiveriaalliacea.taza.rest;
 
 import com.petiveriaalliacea.taza.dto.UserRequestDto;
-import com.petiveriaalliacea.taza.entities.Company;
-import com.petiveriaalliacea.taza.entities.Role;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.services.impl.OrderService;
 import com.petiveriaalliacea.taza.services.impl.ReviewService;
 import com.petiveriaalliacea.taza.services.impl.UserService;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.headers.Header;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,12 +24,6 @@ public class UserController {
     private final UserService userService;
     private final OrderService orderService;
     private final ReviewService reviewService;
-
-    @PostMapping("/role/save")
-    public ResponseEntity<Role> saveRole(@RequestBody Role role) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.addRole(role));
-    }
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
@@ -84,11 +70,4 @@ public class UserController {
     public ResponseEntity<Integer> getReviewsCount(@PathVariable Long id) {
         return ResponseEntity.ok(reviewService.getReviewsCountOfUser(id));
     }
-}
-
-
-@Data
-class RoleToUser {
-    private String username;
-    private String roleName;
 }

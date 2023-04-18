@@ -1,6 +1,7 @@
 package com.petiveriaalliacea.taza.services.impl;
 
 import com.petiveriaalliacea.taza.dto.UserRequestDto;
+import com.petiveriaalliacea.taza.dto.UserResponseDto;
 import com.petiveriaalliacea.taza.entities.Role;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.repositories.RoleRepository;
@@ -18,10 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.Objects.isNull;
 
@@ -62,7 +60,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User register(UserRequestDto userDto) {
+    public UserResponseDto register(UserRequestDto userDto) {
         boolean userExists = userRepository.findByUsername(userDto.getUsername()).isPresent();
         if (userExists) {
             throw new IllegalStateException("User with this username already exists!");
@@ -71,11 +69,11 @@ public class UserService implements IUserService {
         User user = mapper.toUser(userDto);
         user.setPassword(encodedPassword);
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
-        return userRepository.save(user);
+        return mapper.toUserResponseDto(userRepository.save(user));
     }
 
     @Override
-    public User registerCompanyRepresentative(UserRequestDto userDto) {
+    public UserResponseDto registerCompanyRepresentative(UserRequestDto userDto) {
         boolean userExists = userRepository.findByUsername(userDto.getUsername()).isPresent();
         if (userExists) {
             throw new IllegalStateException("User with this username already exists!");
@@ -84,12 +82,7 @@ public class UserService implements IUserService {
         User user = mapper.toUser(userDto);
         user.setPassword(encodedPassword);
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_COMPANY")));
-        return userRepository.save(user);
-    }
-
-    @Override
-    public Role addRole(Role role) {
-        return roleRepository.save(role);
+        return mapper.toUserResponseDto(userRepository.save(user));
     }
 
     @Override
@@ -147,9 +140,11 @@ public class UserService implements IUserService {
         log.info("Adding admin role to the user {}", id);
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
-            user.get().setRoles(Arrays.asList(roleRepository.findByName("ROLE_ADMIN")));
+            Collection<Role> userRoles = user.get().getRoles();
+            userRoles.add(roleRepository.findByName("ROLE_ADMIN"));
+            user.get().setRoles(userRoles);
             userRepository.save(user.get());
-            return "Admin role added to the user " + id;
+            return "Admin role added to the user " + user.get().getUsername();
         } else
             return "Adding admin role failed! User does not exist.";
     }
