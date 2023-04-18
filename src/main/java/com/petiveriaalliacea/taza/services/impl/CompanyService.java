@@ -83,10 +83,12 @@ public class CompanyService implements ICompanyService {
     }
 
     @Override
-    public CompanyDto addNewCompany(CompanyRequestDto companyDto){
+    public CompanyDto addNewCompany(String token, CompanyRequestDto companyDto){
         Company company = mapper.toCompany(companyDto);
         company.setCategories(companyDto.getCategories());
-
+        User user = userRepository.findByUsername(JwtUtils.getUsername(token))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
+        company.setUser(user);
         return mapper.toCompanyDto(companyRepository.save(company));
     }
     @Override

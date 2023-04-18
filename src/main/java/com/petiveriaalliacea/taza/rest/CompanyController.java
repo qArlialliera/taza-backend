@@ -45,9 +45,9 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.getUserCompanyExist(token));
     }
     @PostMapping("/add")
-    public ResponseEntity<CompanyDto> addNewCompany(@RequestBody CompanyRequestDto companyDto){
+    public ResponseEntity<CompanyDto> addNewCompany(@RequestBody CompanyRequestDto companyDto, @RequestHeader("Authorization") @Parameter(hidden = true) String token){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/companies/add").toUriString());
-        return ResponseEntity.created(uri).body(companyService.addNewCompany(companyDto));
+        return ResponseEntity.created(uri).body(companyService.addNewCompany(token, companyDto));
     }
     @PutMapping("/{id}")
     public ResponseEntity<CompanyDto> editCompany(@RequestBody CompanyDto company, @PathVariable Long id){

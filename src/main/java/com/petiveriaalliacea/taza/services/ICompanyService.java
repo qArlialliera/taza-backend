@@ -17,7 +17,7 @@ public interface ICompanyService {
 
     boolean getUserCompanyExist(String token);
 
-    CompanyDto addNewCompany(CompanyRequestDto companyDto);
+    CompanyDto addNewCompany(String token, CompanyRequestDto companyDto);
 
     CompanyDto editCompany(Long id, CompanyDto dto);
 
