@@ -86,6 +86,11 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    public int getUserOrdersCount(Long userId) {
+        return orderRepository.findAllByUser_Id(userId).get().size();
+    }
+
+    @Override
     public List<Order> getCompanyOrders(Long companyId) {
         Company company = companyRepository.findById(companyId).get();
         return orderRepository.findAllByCompanyService_Company(company).get();

@@ -9,6 +9,10 @@ public interface IReviewService {
     List<ReviewDto> getReviews();
     List<ReviewDto> getReviewsOfCompany(Long companyId);
 
+    List<ReviewDto> getReviewsOfUser(Long userId);
+
+    int getReviewsCountOfUser(Long userId);
+
     List<ReviewDto> getReviewsOfCompanyAndUser(Long companyId, Long userId);
 
     ReviewDto getReview(Long id);

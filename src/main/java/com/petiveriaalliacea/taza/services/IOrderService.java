@@ -17,5 +17,7 @@ public interface IOrderService {
 
     List<Order> getUserOrders(Long userId);
 
+    int getUserOrdersCount(Long userId);
+
     List<Order> getCompanyOrders(Long companyId);
 }

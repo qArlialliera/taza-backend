@@ -40,6 +40,17 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
+    public List<ReviewDto> getReviewsOfUser(Long userId) {
+        List<Review> reviews = reviewRepository.findReviewsByUser_Id(userId).get();
+        return reviews.stream().map(mapper::toReviewDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public int getReviewsCountOfUser(Long userId) {
+        return reviewRepository.findReviewsByUser_Id(userId).get().size();
+    }
+
+    @Override
     public List<ReviewDto> getReviewsOfCompanyAndUser(Long companyId, Long userId) {
         List<Review> reviews = reviewRepository.findReviewsByCompany_IdAndUser_Id(companyId,userId).get();
         return reviews.stream().map(mapper::toReviewDto).collect(Collectors.toList());

@@ -4,6 +4,8 @@ import com.petiveriaalliacea.taza.dto.UserRequestDto;
 import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.entities.Role;
 import com.petiveriaalliacea.taza.entities.User;
+import com.petiveriaalliacea.taza.services.impl.OrderService;
+import com.petiveriaalliacea.taza.services.impl.ReviewService;
 import com.petiveriaalliacea.taza.services.impl.UserService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,6 +30,8 @@ import static com.petiveriaalliacea.taza.utils.Constants.PRIVATE_API_ENDPOINT;
 public class UserController {
 
     private final UserService userService;
+    private final OrderService orderService;
+    private final ReviewService reviewService;
 
     @PostMapping("/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role) {
@@ -69,6 +73,16 @@ public class UserController {
     @GetMapping("/photo/get")
     public ResponseEntity<UUID> getPhoto(@RequestHeader("Authorization") @Parameter(hidden = true) String token) {
         return ResponseEntity.ok(userService.getPhoto(token));
+    }
+
+    @GetMapping("/orders/count/{id}")
+    public ResponseEntity<Integer> getOrdersCount(@PathVariable Long id) {
+        return ResponseEntity.ok(orderService.getUserOrdersCount(id));
+    }
+
+    @GetMapping("/reviews/count/{id}")
+    public ResponseEntity<Integer> getReviewsCount(@PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.getReviewsCountOfUser(id));
     }
 }
 
