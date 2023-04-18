@@ -6,13 +6,14 @@ import com.petiveriaalliacea.taza.dto.ReviewDto;
 import com.petiveriaalliacea.taza.dto.UserRequestDto;
 import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.entities.Order;
-import com.petiveriaalliacea.taza.entities.Review;
 import com.petiveriaalliacea.taza.entities.User;
+import com.petiveriaalliacea.taza.entities.Review;
 import org.mapstruct.InjectionStrategy;
 
 
 @org.mapstruct.Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface Mapper {
+
     User toUser(UserRequestDto dto);
 
     Company toCompany(CompanyRequestDto dto);
