@@ -45,12 +45,12 @@ public class OrderController {
     private ResponseEntity deleteOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.deleteOrder(id));
     }
-    @GetMapping("user/{id}")
+    @GetMapping("user/{userId}")
     public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
         return ResponseEntity.ok(orderService.getUserOrders(userId));
     }
 
-    @GetMapping("company/{id}")
+    @GetMapping("company/{companyId}")
     public ResponseEntity<List<Order>> getCompanyOrders(@PathVariable Long companyId) {
         return ResponseEntity.ok(orderService.getCompanyOrders(companyId));
     }
