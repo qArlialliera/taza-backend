@@ -86,10 +86,17 @@ public class CompanyService implements ICompanyService {
     public CompanyDto addNewCompany(String token, CompanyRequestDto companyDto){
         Company company = mapper.toCompany(companyDto);
         company.setCategories(companyDto.getCategories());
+        company.setActive(false);
         User user = userRepository.findByUsername(JwtUtils.getUsername(token))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
         company.setUser(user);
         return mapper.toCompanyDto(companyRepository.save(company));
+    }
+    @Override
+    public CompanyDto makeCompanyActive(Long id){
+        Optional<Company> company = companyRepository.findById(id);
+        company.ifPresent(value -> value.setActive(true));
+        return mapper.toCompanyDto(companyRepository.save(company.get()));
     }
     @Override
     public CompanyDto editCompany(Long id, CompanyDto dto) {

@@ -30,5 +30,5 @@ public class CompanyDto {
     private Collection<Category> categories;
     private Collection<Review> reviews;
     private User user;
-
+    private boolean isActive;
 }

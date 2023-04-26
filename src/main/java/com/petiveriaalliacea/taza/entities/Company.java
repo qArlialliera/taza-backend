@@ -30,5 +30,6 @@ public class Company extends BaseEntity<Long> {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+    private boolean isActive;
 
 }

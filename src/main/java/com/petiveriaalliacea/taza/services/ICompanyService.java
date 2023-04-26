@@ -19,6 +19,8 @@ public interface ICompanyService {
 
     CompanyDto addNewCompany(String token, CompanyRequestDto companyDto);
 
+    CompanyDto makeCompanyActive(Long id);
+
     CompanyDto editCompany(Long id, CompanyDto dto);
 
     String deleteCompany(Long id);

@@ -49,6 +49,11 @@ public class CompanyController {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/companies/add").toUriString());
         return ResponseEntity.created(uri).body(companyService.addNewCompany(token, companyDto));
     }
+    @PutMapping("/activate/{id}")
+    public ResponseEntity<CompanyDto> makeCompanyActive(@PathVariable Long id){
+        return ResponseEntity.ok(companyService.makeCompanyActive(id));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<CompanyDto> editCompany(@RequestBody CompanyDto company, @PathVariable Long id){
         return ResponseEntity.ok(companyService.editCompany(id, company));
