@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Controller
-@CrossOrigin(allowedHeaders = "*", origins = "*")
+@CrossOrigin(origins = "*")
 public class ChatController {
 
     @Autowired

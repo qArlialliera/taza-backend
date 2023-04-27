@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests().requestMatchers(PUBLIC_API_ENDPOINT + "/**").permitAll()
+                .and().authorizeHttpRequests().requestMatchers("/ws/**").permitAll()
                 .and().authorizeHttpRequests().requestMatchers("/swagger-ui.html").permitAll() // swagger API URLs
                 .and().authorizeHttpRequests().requestMatchers("/v3/api-docs/**").permitAll()
                 .and().authorizeHttpRequests().requestMatchers("/swagger-ui/**").permitAll()
@@ -80,10 +81,11 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("*"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
         config.setExposedHeaders(Arrays.asList("x-auth-token"));
+        config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         log.info("Registering CORS filter");
         return new CorsFilter(source);
