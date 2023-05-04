@@ -24,15 +24,15 @@ public class ChatMessageController {
 
     private final ChatMessageService chatMessageService;
     @GetMapping("/{recipientId}")
-    public ResponseEntity<List<ChatMessageDto>> getAllCompanies(@RequestHeader("Authorization") @Parameter(hidden = true) String token, @PathVariable Long recipientId){
+    public ResponseEntity<List<ChatMessageDto>> getAllMessages(@RequestHeader("Authorization") @Parameter(hidden = true) String token, @PathVariable Long recipientId){
         return ResponseEntity.ok().body(chatMessageService.findChatMessages(token, recipientId));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ChatMessageDto> editCompany(@RequestBody String message, @PathVariable Long id){
+    public ResponseEntity<ChatMessageDto> editMessages(@RequestBody String message, @PathVariable Long id){
         return ResponseEntity.ok(chatMessageService.editMessage(id, message));
     }
     @DeleteMapping("/{id}")
-    private ResponseEntity deleteCompany(@PathVariable Long id){
+    private ResponseEntity deleteMessages(@PathVariable Long id){
         return ResponseEntity.ok(chatMessageService.deleteMessage(id));
     }
 }
