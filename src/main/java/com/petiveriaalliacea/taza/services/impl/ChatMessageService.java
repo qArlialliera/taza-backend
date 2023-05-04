@@ -4,18 +4,24 @@ import com.petiveriaalliacea.taza.entities.chat.ChatMessage;
 import com.petiveriaalliacea.taza.entities.chat.MessageStatus;
 import com.petiveriaalliacea.taza.repositories.ChatMessageRepository;
 import com.petiveriaalliacea.taza.services.IChatMessageService;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class ChatMessageService implements IChatMessageService {
-    private ChatMessageRepository repository;
+    private final ChatMessageRepository chatMessageRepository;
 
     @Override
     public ChatMessage save(ChatMessage chatMessage) {
         chatMessage.setStatus(MessageStatus.RECEIVED);
-        repository.save(chatMessage);
+        chatMessageRepository.save(chatMessage);
         return chatMessage;
     }
 

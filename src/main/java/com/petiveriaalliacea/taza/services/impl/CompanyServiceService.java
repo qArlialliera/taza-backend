@@ -22,7 +22,6 @@ import java.util.Optional;
 @Transactional
 @Slf4j
 public class CompanyServiceService implements ICompanyServiceService {
-    private final CategoryRepository categoryRepository;
     private final CompanyRepository companyRepository;
     private final CompanyServiceRepository companyServiceRepository;
 

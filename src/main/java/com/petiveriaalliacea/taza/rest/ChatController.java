@@ -23,16 +23,17 @@ public class ChatController {
     @Autowired
     private ChatRoomService chatRoomService;
 
-    @MessageMapping("/message")
+    @MessageMapping("/message") // same as addEndpoint
     @SendTo("/chatroom/public")
     public ChatMessage receivePublicMessage(@Payload ChatMessage chatMessage) {
         return chatMessageService.save(chatMessage);
     }
 
     @MessageMapping("/private-message")
+    @SendTo("/chatroom/private")
     public ChatMessage receivePrivateMessage(@Payload ChatMessage chatMessage) {
         messagingTemplate.convertAndSendToUser(chatMessage.getRecipientName(), "/private", chatMessage); // /user/David/private
-        return chatMessage;
+        return chatMessageService.save(chatMessage);
     }
 
     @MessageMapping("/chat")
