@@ -5,6 +5,7 @@ import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.entities.Order;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.entities.Review;
+import com.petiveriaalliacea.taza.entities.chat.ChatMessage;
 import org.mapstruct.InjectionStrategy;
 
 
@@ -27,5 +28,7 @@ public interface Mapper {
 
     OrderDto toOrderDto(Order order);
 
+    ChatMessage toChatMessage(ChatMessageDto dto);
+    ChatMessageDto toChatMessageDto(ChatMessage chatMessage);
 
 }
