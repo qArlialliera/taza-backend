@@ -39,7 +39,10 @@ public class ChatMessageService implements IChatMessageService {
     public List<ChatMessageDto> findChatMessages(String senderToken, Long recipientId) {
         User user = userRepository.findByUsername(JwtUtils.getUsername(senderToken))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
-        return chatMessageRepository.findAllBySenderIdAndAndRecipientId(user.getId(), recipientId)
+        List<ChatMessage> allMessages = chatMessageRepository.findAllBySenderIdAndAndRecipientId(user.getId(), recipientId);
+        allMessages.addAll(chatMessageRepository.findAllBySenderIdAndAndRecipientId(recipientId, user.getId()));
+
+        return allMessages
                 .stream()
                 .map(mapper::toChatMessageDto)
                 .collect(Collectors.toList());
