@@ -1,11 +1,6 @@
 package com.petiveriaalliacea.taza.rest;
 
 import com.petiveriaalliacea.taza.dto.ChatMessageDto;
-import com.petiveriaalliacea.taza.dto.CompanyDto;
-import com.petiveriaalliacea.taza.entities.User;
-import com.petiveriaalliacea.taza.entities.chat.ChatMessage;
-import com.petiveriaalliacea.taza.repositories.UserRepository;
-import com.petiveriaalliacea.taza.security.JwtUtils;
 import com.petiveriaalliacea.taza.services.impl.ChatMessageService;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;

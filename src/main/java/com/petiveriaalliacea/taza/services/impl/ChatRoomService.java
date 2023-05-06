@@ -3,13 +3,20 @@ package com.petiveriaalliacea.taza.services.impl;
 import com.petiveriaalliacea.taza.entities.chat.ChatRoom;
 import com.petiveriaalliacea.taza.repositories.ChatRoomRepository;
 import com.petiveriaalliacea.taza.services.IChatRoomService;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
 @Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
 public class ChatRoomService implements IChatRoomService {
-    private ChatRoomRepository chatRoomRepository;
+    private final ChatRoomRepository chatRoomRepository;
     @Override
     public Optional<Long> getChatId(Long senderId, Long recipientId, boolean createIfNotExist) {
         return chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId)

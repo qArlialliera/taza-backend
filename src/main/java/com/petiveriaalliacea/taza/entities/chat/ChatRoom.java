@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.entities.chat;
 
+import com.petiveriaalliacea.taza.entities.base.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -13,9 +14,7 @@ import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ChatRoom {
-    @Id
-    private Long id;
+public class ChatRoom extends BaseEntity<Long> {
     private Long chatId;
     private Long senderId;
     private Long recipientId;
