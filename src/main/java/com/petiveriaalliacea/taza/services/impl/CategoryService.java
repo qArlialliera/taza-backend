@@ -40,6 +40,12 @@ public class CategoryService implements ICategoryService {
             if (!StringUtils.isEmpty(dto.getName())) {
                 category.get().setName(dto.getName());
             }
+            if (!StringUtils.isEmpty(dto.getNameRu())) {
+                category.get().setNameRu(dto.getNameRu());
+            }
+            if (!StringUtils.isEmpty(dto.getNameKz())) {
+                category.get().setNameKz(dto.getNameKz());
+            }
         }
         return categoryRepository.save(category.get());
     }

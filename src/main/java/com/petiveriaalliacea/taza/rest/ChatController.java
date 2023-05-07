@@ -32,8 +32,14 @@ public class ChatController {
     @MessageMapping("/private-message")
     @SendTo("/chatroom/private")
     public ChatMessage receivePrivateMessage(@Payload ChatMessage chatMessage) {
-        messagingTemplate.convertAndSendToUser(chatMessage.getRecipientName(), "/private", chatMessage); // /user/David/private
-        return chatMessageService.save(chatMessage);
+        var chatId = chatRoomService
+                .getChatId(chatMessage.getSenderId(), chatMessage.getRecipientId());
+        chatMessage.setChatId(chatId.get());
+
+        ChatMessage savedMessage = chatMessageService.save(chatMessage);
+
+        messagingTemplate.convertAndSendToUser(chatMessage.getRecipientName(), "/private", savedMessage); // /user/David/private
+        return savedMessage;
     }
 
     @MessageMapping("/chat")

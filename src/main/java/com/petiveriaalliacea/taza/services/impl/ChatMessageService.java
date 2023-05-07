@@ -1,10 +1,13 @@
 package com.petiveriaalliacea.taza.services.impl;
 
 import com.petiveriaalliacea.taza.dto.ChatMessageDto;
+import com.petiveriaalliacea.taza.dto.UserViewDto;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.entities.chat.ChatMessage;
+import com.petiveriaalliacea.taza.entities.chat.ChatRoom;
 import com.petiveriaalliacea.taza.entities.chat.MessageStatus;
 import com.petiveriaalliacea.taza.repositories.ChatMessageRepository;
+import com.petiveriaalliacea.taza.repositories.ChatRoomRepository;
 import com.petiveriaalliacea.taza.repositories.UserRepository;
 import com.petiveriaalliacea.taza.security.JwtUtils;
 import com.petiveriaalliacea.taza.services.IChatMessageService;
@@ -25,14 +28,30 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ChatMessageService implements IChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
     private final Mapper mapper;
 
     @Override
     public ChatMessage save(ChatMessage chatMessage) {
-        chatMessage.setStatus(MessageStatus.RECEIVED);
+        chatMessage.setStatus(MessageStatus.DELIVERED);
         chatMessageRepository.save(chatMessage);
         return chatMessage;
+    }
+
+    @Override
+    public List<ChatMessageDto> changeStatus(String recipientToken, Long senderId) {
+        User recipient = userRepository.findByUsername(JwtUtils.getUsername(recipientToken))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
+        List<ChatMessage> allMessages = chatMessageRepository.findAllBySenderIdAndAndRecipientIdAndStatus(senderId, recipient.getId(), MessageStatus.DELIVERED);
+        allMessages.forEach((chatMessage) -> {
+            chatMessage.setStatus(MessageStatus.DELIVERED);
+            chatMessageRepository.save(chatMessage);
+        });
+        return allMessages
+                .stream()
+                .map(mapper::toChatMessageDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -46,6 +65,17 @@ public class ChatMessageService implements IChatMessageService {
                 .stream()
                 .map(mapper::toChatMessageDto)
                 .collect(Collectors.toList());
+    }
+    @Override
+    public List<UserViewDto> getAllChatRooms(String token) {
+        User user = userRepository.findByUsername(JwtUtils.getUsername(token))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
+        Optional<List<ChatRoom>> allChat = chatRoomRepository.findAllBySenderId(user.getId());
+        List<User> users = null;
+        if(allChat.isPresent())
+            for (ChatRoom room : allChat.get())
+                users.add(userRepository.findById(room.getSenderId()).get());
+        return users.stream().map(mapper::toUserViewDto).collect(Collectors.toList());
     }
 
     @Override

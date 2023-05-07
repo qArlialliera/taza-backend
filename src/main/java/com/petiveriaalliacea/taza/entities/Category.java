@@ -14,4 +14,7 @@ import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
 @AllArgsConstructor
 public class Category extends BaseEntity<Long> {
     private String name;
+    private String nameRu;
+    private String nameKz;
+
 }

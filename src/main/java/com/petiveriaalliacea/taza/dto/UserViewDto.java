@@ -14,7 +14,6 @@ import java.util.UUID;
 public class UserViewDto {
     private Long id;
     private String username;
-    private String password;
     private String fullName;
     private String email;
     private String city;
