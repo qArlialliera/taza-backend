@@ -3,16 +3,26 @@ package com.petiveriaalliacea.taza.services.impl;
 import com.petiveriaalliacea.taza.dto.OrderDto;
 import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.entities.Order;
+import com.petiveriaalliacea.taza.entities.User;
+import com.petiveriaalliacea.taza.entities.chat.ChatMessage;
+import com.petiveriaalliacea.taza.entities.chat.MessageStatus;
+import com.petiveriaalliacea.taza.repositories.ChatRoomRepository;
 import com.petiveriaalliacea.taza.repositories.CompanyRepository;
 import com.petiveriaalliacea.taza.repositories.OrderRepository;
+import com.petiveriaalliacea.taza.repositories.UserRepository;
+import com.petiveriaalliacea.taza.security.JwtUtils;
 import com.petiveriaalliacea.taza.services.IOrderService;
 import com.petiveriaalliacea.taza.utils.Mapper;
 import com.petiveriaalliacea.taza.utils.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +31,13 @@ import java.util.Optional;
 @Transactional
 @Slf4j
 public class OrderService implements IOrderService {
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
     private final OrderRepository orderRepository;
     private final CompanyRepository companyRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
+    private final ChatMessageService chatMessageService;
     private final Mapper mapper;
     @Override
     public List<Order> getAllOrders() {
@@ -35,8 +50,25 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order addNewOrder(Order newOrder) {
-        return orderRepository.save(newOrder);
+    public OrderDto addNewOrder(String token, OrderDto orderDto) {
+        User user = userRepository.findByUsername(JwtUtils.getUsername(token))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
+        Order order = mapper.toOrder(orderDto);
+        Optional<Company> company = orderDto.getCompanyService().getCompany().stream().findFirst();
+        User compRep = company.get().getUser();
+        var chatId = chatRoomRepository.findBySenderIdAndRecipientId(user.getId(),compRep.getId()).get().getChatId();
+        String content = "Уважаемые сотрудники службы клининговых услуг!\n" +
+                "\n" +
+                "Новый заказ профессиональной уборки помещения. Дата: " + order.getDate().getDate() + ". Помещение имеет площадь " +order.getArea()+" квадратных метров и состоит из " + order.getRooms() + " комнат.\n" +
+                "\n" +
+                "Просим вас предоставить нам подробную информацию о стоимости и условиях проведения уборки.\n" +
+                "\n" +
+                "Благодарим вас за вашу работу и ожидаем вашего ответа.\n" +
+                "\n";
+        ChatMessage message = new ChatMessage(chatId, user.getId(), compRep.getId(), user.getUsername(), compRep.getUsername(),content, new Date(), MessageStatus.DELIVERED);
+        ChatMessage sentMessage = chatMessageService.save(message);
+        messagingTemplate.convertAndSendToUser(sentMessage.getRecipientName(), "/private", sentMessage); // /user/David/private
+        return mapper.toOrderDto(orderRepository.save(order));
     }
 
     @Override

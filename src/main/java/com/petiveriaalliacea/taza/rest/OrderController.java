@@ -5,6 +5,7 @@ import com.petiveriaalliacea.taza.dto.RequestDto;
 import com.petiveriaalliacea.taza.entities.Category;
 import com.petiveriaalliacea.taza.entities.Order;
 import com.petiveriaalliacea.taza.services.impl.OrderService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,8 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Order> addNewOrder(@RequestBody Order order) {
-        return ResponseEntity.ok(orderService.addNewOrder(order));
+    public ResponseEntity<OrderDto> addNewOrder(@RequestHeader("Authorization") @Parameter(hidden = true) String token, @RequestBody OrderDto orderDto) {
+        return ResponseEntity.ok(orderService.addNewOrder(token, orderDto));
     }
     @PutMapping("/{id}")
     public ResponseEntity<OrderDto> editOrder(@RequestBody OrderDto orderDto, @PathVariable Long id){

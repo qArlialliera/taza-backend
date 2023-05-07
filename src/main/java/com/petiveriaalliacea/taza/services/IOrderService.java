@@ -11,7 +11,9 @@ public interface IOrderService {
 //    List<Order> getUserOrders(Long userId);
 //    List<Order> getCompanyOrders(Long companyId);
     Order getOrder(Long id);
-    Order addNewOrder(Order order);
+
+    OrderDto addNewOrder(String token, OrderDto orderDto);
+
     OrderDto editOrder(Long id, OrderDto orderDto);
     String deleteOrder(Long id);
 
