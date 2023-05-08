@@ -12,7 +12,7 @@ import java.util.Date;
 @ToString
 public class ChatMessageDto {
     private Long id;
-    private Long chatId;
+    private String chatId;
     private Long senderId;
     private Long recipientId;
     private String senderName;
