@@ -15,7 +15,7 @@ import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
 @NoArgsConstructor
 @Builder
 public class ChatRoom extends BaseEntity<Long> {
-    private Long chatId;
+    private String chatId;
     private Long senderId;
     private Long recipientId;
 }

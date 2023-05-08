@@ -1,7 +1,9 @@
 package com.petiveriaalliacea.taza.services.impl;
 
+import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.entities.chat.ChatRoom;
 import com.petiveriaalliacea.taza.repositories.ChatRoomRepository;
+import com.petiveriaalliacea.taza.repositories.UserRepository;
 import com.petiveriaalliacea.taza.services.IChatRoomService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
-import java.util.List;
 import java.util.Optional;
 @Service
 @RequiredArgsConstructor
@@ -17,36 +18,44 @@ import java.util.Optional;
 @Slf4j
 public class ChatRoomService implements IChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
+
     @Override
-    public Optional<Long> getChatId(Long senderId, Long recipientId) {
+    public Optional<String> getChatId(Long senderId, Long recipientId) {
+        Optional<User> user1 = userRepository.findById(senderId);
+        Optional<User> user2 = userRepository.findById(recipientId);
+
         return chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId)
                 .map(ChatRoom::getChatId)
                 .or(() -> {
                     var chatId =
-                            String.format("%s_%s", senderId.toString(), recipientId.toString());
+                            String.format("%s_%s_%s_%s", senderId.toString(), recipientId.toString(),user1.get().getUsername(), user2.get().getUsername());
 
                     ChatRoom senderRecipient = ChatRoom
                             .builder()
-                            .chatId(Long.valueOf(chatId))
+                            .chatId(chatId)
                             .senderId(senderId)
                             .recipientId(recipientId)
                             .build();
 
                     ChatRoom recipientSender = ChatRoom
                             .builder()
-                            .chatId(Long.valueOf(chatId))
+                            .chatId(chatId)
                             .senderId(recipientId)
                             .recipientId(senderId)
                             .build();
                     chatRoomRepository.save(senderRecipient);
                     chatRoomRepository.save(recipientSender);
 
-                    return Optional.of(Long.valueOf(chatId));
+                    return Optional.of(chatId);
                 });
     }
 
     @Override
-    public Optional<Long> getChatId(Long senderId, Long recipientId, boolean createIfNotExist) {
+    public Optional<String> getChatId(Long senderId, Long recipientId, boolean createIfNotExist) {
+        Optional<User> user1 = userRepository.findById(senderId);
+        Optional<User> user2 = userRepository.findById(recipientId);
+
         return chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId)
                 .map(ChatRoom::getChatId)
                 .or(() -> {
@@ -54,25 +63,25 @@ public class ChatRoomService implements IChatRoomService {
                         return  Optional.empty();
                     }
                     var chatId =
-                            String.format("%s_%s", senderId.toString(), recipientId.toString());
+                            String.format("%s_%s_%s_%s", senderId.toString(), recipientId.toString(),user1.get().getUsername(), user2.get().getUsername());
 
                     ChatRoom senderRecipient = ChatRoom
                             .builder()
-                            .chatId(Long.valueOf(chatId))
+                            .chatId(chatId)
                             .senderId(senderId)
                             .recipientId(recipientId)
                             .build();
 
                     ChatRoom recipientSender = ChatRoom
                             .builder()
-                            .chatId(Long.valueOf(chatId))
+                            .chatId(chatId)
                             .senderId(recipientId)
                             .recipientId(senderId)
                             .build();
                     chatRoomRepository.save(senderRecipient);
                     chatRoomRepository.save(recipientSender);
 
-                    return Optional.of(Long.valueOf(chatId));
+                    return Optional.of(chatId);
                 });
 
     }

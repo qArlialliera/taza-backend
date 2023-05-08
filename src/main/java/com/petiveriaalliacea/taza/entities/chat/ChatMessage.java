@@ -17,7 +17,7 @@ import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatMessage extends BaseEntity<Long> {
-    private Long chatId;
+    private String chatId;
     private Long senderId;
     private Long recipientId;
     private String senderName;
