@@ -35,9 +35,9 @@ public class OrderService implements IOrderService {
     private SimpMessagingTemplate messagingTemplate;
     private final OrderRepository orderRepository;
     private final CompanyRepository companyRepository;
-    private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
     private final ChatMessageService chatMessageService;
+    private final ChatRoomService chatRoomService;
     private final Mapper mapper;
     @Override
     public List<Order> getAllOrders() {
@@ -56,7 +56,7 @@ public class OrderService implements IOrderService {
         Order order = mapper.toOrder(orderDto);
         Optional<Company> company = orderDto.getCompanyService().getCompany().stream().findFirst();
         User compRep = company.get().getUser();
-        var chatId = chatRoomRepository.findBySenderIdAndRecipientId(user.getId(),compRep.getId()).get().getChatId();
+        var chatId = chatRoomService.getChatId(user.getId(), compRep.getId());
         String content = "Уважаемые сотрудники службы клининговых услуг!\n" +
                 "\n" +
                 "Новый заказ профессиональной уборки помещения. Дата: " + order.getDate().getDate() + ". Помещение имеет площадь " +order.getArea()+" квадратных метров и состоит из " + order.getRooms() + " комнат.\n" +
@@ -65,7 +65,7 @@ public class OrderService implements IOrderService {
                 "\n" +
                 "Благодарим вас за вашу работу и ожидаем вашего ответа.\n" +
                 "\n";
-        ChatMessage message = new ChatMessage(chatId, user.getId(), compRep.getId(), user.getUsername(), compRep.getUsername(),content, new Date(), MessageStatus.DELIVERED);
+        ChatMessage message = new ChatMessage(chatId.get(), user.getId(), compRep.getId(), user.getUsername(), compRep.getUsername(),content, new Date(), MessageStatus.DELIVERED);
         ChatMessage sentMessage = chatMessageService.save(message);
         messagingTemplate.convertAndSendToUser(sentMessage.getRecipientName(), "/private", sentMessage); // /user/David/private
         return mapper.toOrderDto(orderRepository.save(order));
