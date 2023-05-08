@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -57,8 +58,8 @@ public class OrderService implements IOrderService {
         Optional<Company> company = orderDto.getCompanyService().getCompany().stream().findFirst();
         User compRep = company.get().getUser();
         var chatId = chatRoomService.getChatId(user.getId(), compRep.getId());
-        String content = "Новый заказ профессиональной уборки помещения. Дата: " + order.getDate().getDate() + ". Помещение имеет площадь " +order.getArea()+" квадратных метров и состоит из " + order.getRooms() + " комнат.";
-        ChatMessage message = new ChatMessage(chatId.get(), user.getId(), compRep.getId(), user.getUsername(), compRep.getUsername(),content, new Date(), MessageStatus.DELIVERED);
+        String content = "Новый заказ профессиональной уборки помещения.\nДата и время: " + order.getDate() + "\nПлощадь: " +order.getArea()+" кв. \nКол. комнат: " + order.getRooms();
+        ChatMessage message = new ChatMessage(chatId.get(), user.getId(), compRep.getId(), user.getUsername(), compRep.getUsername(),content, Date.from(Instant.now()), MessageStatus.DELIVERED);
         ChatMessage sentMessage = chatMessageService.save(message);
         messagingTemplate.convertAndSendToUser(sentMessage.getRecipientName(), "/private", sentMessage); // /user/David/private
         return mapper.toOrderDto(orderRepository.save(order));
