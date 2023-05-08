@@ -57,14 +57,7 @@ public class OrderService implements IOrderService {
         Optional<Company> company = orderDto.getCompanyService().getCompany().stream().findFirst();
         User compRep = company.get().getUser();
         var chatId = chatRoomService.getChatId(user.getId(), compRep.getId());
-        String content = "Уважаемые сотрудники службы клининговых услуг!\n" +
-                "\n" +
-                "Новый заказ профессиональной уборки помещения. Дата: " + order.getDate().getDate() + ". Помещение имеет площадь " +order.getArea()+" квадратных метров и состоит из " + order.getRooms() + " комнат.\n" +
-                "\n" +
-                "Просим вас предоставить нам подробную информацию о стоимости и условиях проведения уборки.\n" +
-                "\n" +
-                "Благодарим вас за вашу работу и ожидаем вашего ответа.\n" +
-                "\n";
+        String content = "Новый заказ профессиональной уборки помещения. Дата: " + order.getDate().getDate() + ". Помещение имеет площадь " +order.getArea()+" квадратных метров и состоит из " + order.getRooms() + " комнат.";
         ChatMessage message = new ChatMessage(chatId.get(), user.getId(), compRep.getId(), user.getUsername(), compRep.getUsername(),content, new Date(), MessageStatus.DELIVERED);
         ChatMessage sentMessage = chatMessageService.save(message);
         messagingTemplate.convertAndSendToUser(sentMessage.getRecipientName(), "/private", sentMessage); // /user/David/private
