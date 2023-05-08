@@ -1,6 +1,7 @@
 package com.petiveriaalliacea.taza.services.impl;
 
 import com.petiveriaalliacea.taza.dto.ChatMessageDto;
+import com.petiveriaalliacea.taza.dto.ChatRoomUserDto;
 import com.petiveriaalliacea.taza.dto.UserViewDto;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.entities.chat.ChatMessage;
@@ -68,15 +69,25 @@ public class ChatMessageService implements IChatMessageService {
                 .collect(Collectors.toList());
     }
     @Override
-    public List<UserViewDto> getAllChatRooms(String token) {
+    public List<ChatRoomUserDto> getAllChatRooms(String token) {
         User user = userRepository.findByUsername(JwtUtils.getUsername(token))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
         Optional<List<ChatRoom>> allChat = chatRoomRepository.findAllBySenderId(user.getId());
-        List<User> users = new ArrayList<>();
+        List<ChatRoomUserDto> companions = new ArrayList<>();
         if(allChat.isPresent())
-            for (ChatRoom room : allChat.get())
-                users.add(userRepository.findById(room.getSenderId()).get());
-        return users.stream().map(mapper::toUserViewDto).collect(Collectors.toList());
+            for (ChatRoom room : allChat.get()) {
+                User current = userRepository.findById(room.getSenderId()).get();
+                ChatMessage message = chatMessageRepository.findByChatId(room.getChatId()).stream().findFirst().get();
+                ChatRoomUserDto chatRoomUserDto = new ChatRoomUserDto();
+                chatRoomUserDto.setChatId(room.getChatId());
+                chatRoomUserDto.setUsername(current.getUsername());
+                chatRoomUserDto.setFullName(current.getFullName());
+                chatRoomUserDto.setPhoto(current.getPhoto());
+                chatRoomUserDto.setMessage(message.getContent());
+                chatRoomUserDto.setTimestamp(message.getTimestamp());
+                companions.add(chatRoomUserDto);
+            }
+        return companions;
     }
 
     @Override

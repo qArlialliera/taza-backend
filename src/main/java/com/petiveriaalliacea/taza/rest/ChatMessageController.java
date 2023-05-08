@@ -1,6 +1,7 @@
 package com.petiveriaalliacea.taza.rest;
 
 import com.petiveriaalliacea.taza.dto.ChatMessageDto;
+import com.petiveriaalliacea.taza.dto.ChatRoomUserDto;
 import com.petiveriaalliacea.taza.dto.UserViewDto;
 import com.petiveriaalliacea.taza.services.impl.ChatMessageService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,7 +25,7 @@ public class ChatMessageController {
         return ResponseEntity.ok().body(chatMessageService.findChatMessages(token, recipientId));
     }
     @GetMapping("/chat-rooms")
-    public ResponseEntity<List<UserViewDto>> getAllChatRooms(@RequestHeader("Authorization") @Parameter(hidden = true) String token){
+    public ResponseEntity<List<ChatRoomUserDto>> getAllChatRooms(@RequestHeader("Authorization") @Parameter(hidden = true) String token){
         return ResponseEntity.ok().body(chatMessageService.getAllChatRooms(token));
     }
     @PutMapping("change-status/{senderId}")
