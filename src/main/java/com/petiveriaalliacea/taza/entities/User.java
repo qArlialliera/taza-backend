@@ -32,6 +32,7 @@ public class User extends BaseEntity<Long> {
     @ManyToMany(fetch = EAGER)
     @JsonIgnore
     private Collection<Role> roles = new ArrayList<>();
+    @JsonManagedReference(value="user_review")
     @OneToMany(mappedBy = "user")
     private Collection<Review> reviews = new ArrayList<>();
     @JsonManagedReference(value="user_order")

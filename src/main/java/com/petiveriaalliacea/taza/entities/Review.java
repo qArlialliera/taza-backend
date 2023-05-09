@@ -1,6 +1,7 @@
 package com.petiveriaalliacea.taza.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petiveriaalliacea.taza.entities.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class Review extends BaseEntity<Long> {
     @JoinColumn(name = "company_id")
     private Company company;
     private double rate;
+    @JsonManagedReference(value="review_comment")
     @OneToMany(mappedBy = "review")
     private Collection<Comment> comments = new ArrayList<>();
 }
