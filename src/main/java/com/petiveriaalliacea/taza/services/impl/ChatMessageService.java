@@ -78,7 +78,7 @@ public class ChatMessageService implements IChatMessageService {
             for (ChatRoom room : allChat.get()) {
                 User current = userRepository.findById(room.getRecipientId()).get();
                 ChatMessage message = chatMessageRepository.findTopByChatIdOrderByIdDesc(room.getChatId());
-                Integer newMessagesCount = chatMessageRepository.findAllByChatIdAndStatus(room.getChatId(), MessageStatus.DELIVERED).size();
+                Integer newMessagesCount = chatMessageRepository.findAllByChatIdAndStatusAndRecipientId(room.getChatId(), MessageStatus.DELIVERED, user.getId()).size();
 
                 ChatRoomUserDto chatRoomUserDto = new ChatRoomUserDto();
                 chatRoomUserDto.setId(current.getId());
