@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.petiveriaalliacea.taza.entities.base.BaseEntity;
 import jakarta.persistence.*;
@@ -8,28 +9,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import static com.petiveriaalliacea.taza.utils.Constants.DATABASE_PREFIX;
-import static jakarta.persistence.FetchType.EAGER;
 
-@Table(name = DATABASE_PREFIX + "review")
+@Table(name = DATABASE_PREFIX + "comment")
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Review extends BaseEntity<Long> {
+public class Comment extends BaseEntity<Long> {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @JsonIgnore
+    private Long parentId;
+    @Column(columnDefinition="TEXT")
+    private String text;
+    @JsonBackReference(value="review_comment")
     @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
-    private double rate;
-    @OneToMany(mappedBy = "review")
-    private Collection<Comment> comments = new ArrayList<>();
+    @JoinColumn(name = "review_id")
+    private Review review;
 }

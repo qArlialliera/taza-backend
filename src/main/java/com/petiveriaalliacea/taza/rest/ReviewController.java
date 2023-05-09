@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.rest;
 
+import com.petiveriaalliacea.taza.dto.ReviewCommentDto;
 import com.petiveriaalliacea.taza.dto.ReviewDto;
 import com.petiveriaalliacea.taza.services.impl.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +38,9 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getRatingOfCompany(id));
     }
     @PostMapping("/add")
-    public ResponseEntity<ReviewDto> addNewReview(@RequestBody ReviewDto reviewDtoDto){
+    public ResponseEntity<ReviewDto> addNewReview(@RequestBody ReviewCommentDto dto){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/reviews/add").toUriString());
-        return ResponseEntity.created(uri).body(reviewService.addNewReview(reviewDtoDto));
+        return ResponseEntity.created(uri).body(reviewService.addNewReview(dto));
     }
     @PutMapping("/{id}")
     public ResponseEntity<ReviewDto> editReview(@RequestBody ReviewDto reviewDtoDto, @PathVariable Long id){

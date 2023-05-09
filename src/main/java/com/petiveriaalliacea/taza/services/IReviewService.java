@@ -1,6 +1,7 @@
 package com.petiveriaalliacea.taza.services;
 
 
+import com.petiveriaalliacea.taza.dto.ReviewCommentDto;
 import com.petiveriaalliacea.taza.dto.ReviewDto;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface IReviewService {
 
     Double getRatingOfCompany(Long companyId);
 
-    ReviewDto addNewReview(ReviewDto reviewDto);
+    ReviewDto addNewReview(ReviewCommentDto reviewDto);
     ReviewDto editReview(Long id, ReviewDto reviewDto);
     String deleteReview(Long id);
 }

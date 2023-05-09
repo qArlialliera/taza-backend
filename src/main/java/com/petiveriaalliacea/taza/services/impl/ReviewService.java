@@ -1,7 +1,11 @@
 package com.petiveriaalliacea.taza.services.impl;
 
+import com.petiveriaalliacea.taza.dto.ReviewCommentDto;
 import com.petiveriaalliacea.taza.dto.ReviewDto;
+import com.petiveriaalliacea.taza.entities.Comment;
 import com.petiveriaalliacea.taza.entities.Review;
+import com.petiveriaalliacea.taza.repositories.CommentRepository;
+import com.petiveriaalliacea.taza.repositories.CompanyRepository;
 import com.petiveriaalliacea.taza.repositories.ReviewRepository;
 import com.petiveriaalliacea.taza.services.IReviewService;
 import com.petiveriaalliacea.taza.utils.Mapper;
@@ -21,6 +25,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ReviewService implements IReviewService {
     private final ReviewRepository reviewRepository;
+    private final CommentRepository commentRepository;
     private final Mapper mapper;
 
     @Override
@@ -73,20 +78,28 @@ public class ReviewService implements IReviewService {
 
 
     @Override
-    public ReviewDto addNewReview(ReviewDto reviewDto) {
-        Review review = mapper.toReview(reviewDto);
+    public ReviewDto addNewReview(ReviewCommentDto reviewDto) {
+        Review review = new Review();
+        review.setRate(reviewDto.getRate());
         review.setCompany(reviewDto.getCompany());
         review.setUser(reviewDto.getUser());
-        return mapper.toReviewDto(reviewRepository.save(review));
+
+        Review newReview = reviewRepository.save(review);
+
+        Comment comment = new Comment();
+        comment.setText(reviewDto.getText());
+        comment.setUser(reviewDto.getUser());
+        comment.setReview(newReview);
+
+        commentRepository.save(comment);
+
+        return mapper.toReviewDto(newReview);
     }
 
     @Override
     public ReviewDto editReview(Long id, ReviewDto reviewDto) {
         Optional<Review> review = reviewRepository.findById(id);
         if(review.isPresent()){
-            if (!StringUtils.isEmpty(reviewDto.getComment())) {
-                review.get().setComment(reviewDto.getComment());
-            }
             if (reviewDto.getRate() != review.get().getRate()) {
                 review.get().setRate(reviewDto.getRate());
             }

@@ -1,10 +1,7 @@
 package com.petiveriaalliacea.taza.utils;
 
 import com.petiveriaalliacea.taza.dto.*;
-import com.petiveriaalliacea.taza.entities.Company;
-import com.petiveriaalliacea.taza.entities.Order;
-import com.petiveriaalliacea.taza.entities.User;
-import com.petiveriaalliacea.taza.entities.Review;
+import com.petiveriaalliacea.taza.entities.*;
 import com.petiveriaalliacea.taza.entities.chat.ChatMessage;
 import org.mapstruct.InjectionStrategy;
 
@@ -31,5 +28,8 @@ public interface Mapper {
 
     ChatMessage toChatMessage(ChatMessageDto dto);
     ChatMessageDto toChatMessageDto(ChatMessage chatMessage);
+
+    Comment toComment(CommentDto dto);
+    CommentDto toCommentDto(Comment comment);
 
 }
