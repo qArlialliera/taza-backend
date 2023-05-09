@@ -24,7 +24,6 @@ public class Company extends BaseEntity<Long> {
     private String phoneNumber;
     private String address;
     private UUID photo;
-    @JsonManagedReference(value="category_company")
     @ManyToMany(fetch = EAGER)
     private Collection<Category> categories = new ArrayList<>();
     @JsonManagedReference(value="review_company")

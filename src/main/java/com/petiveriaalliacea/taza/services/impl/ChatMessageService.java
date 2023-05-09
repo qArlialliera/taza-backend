@@ -47,7 +47,7 @@ public class ChatMessageService implements IChatMessageService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
         List<ChatMessage> allMessages = chatMessageRepository.findAllBySenderIdAndAndRecipientIdAndStatus(senderId, recipient.getId(), MessageStatus.DELIVERED);
         allMessages.forEach((chatMessage) -> {
-            chatMessage.setStatus(MessageStatus.DELIVERED);
+            chatMessage.setStatus(MessageStatus.RECEIVED);
             chatMessageRepository.save(chatMessage);
         });
         return allMessages
