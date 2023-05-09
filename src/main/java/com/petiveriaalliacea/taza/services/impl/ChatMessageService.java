@@ -82,6 +82,7 @@ public class ChatMessageService implements IChatMessageService {
 
                 ChatRoomUserDto chatRoomUserDto = new ChatRoomUserDto();
                 chatRoomUserDto.setId(current.getId());
+                chatRoomUserDto.setSenderId(message.getSenderId());
                 chatRoomUserDto.setChatId(room.getChatId());
                 chatRoomUserDto.setUsername(current.getUsername());
                 chatRoomUserDto.setFullName(current.getFullName());

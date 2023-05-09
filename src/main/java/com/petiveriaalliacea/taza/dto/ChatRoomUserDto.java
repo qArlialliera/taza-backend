@@ -15,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ChatRoomUserDto {
     private Long id;
+    private Long senderId;
     private String chatId;
     private String username;
     private String fullName;
