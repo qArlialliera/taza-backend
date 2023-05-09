@@ -78,6 +78,8 @@ public class ChatMessageService implements IChatMessageService {
             for (ChatRoom room : allChat.get()) {
                 User current = userRepository.findById(room.getRecipientId()).get();
                 ChatMessage message = chatMessageRepository.findTopByChatIdOrderByIdDesc(room.getChatId());
+                Integer newMessagesCount = chatMessageRepository.findAllByChatIdAndStatus(room.getChatId(), MessageStatus.DELIVERED).size();
+
                 ChatRoomUserDto chatRoomUserDto = new ChatRoomUserDto();
                 chatRoomUserDto.setId(current.getId());
                 chatRoomUserDto.setChatId(room.getChatId());
@@ -85,7 +87,9 @@ public class ChatMessageService implements IChatMessageService {
                 chatRoomUserDto.setFullName(current.getFullName());
                 chatRoomUserDto.setPhoto(current.getPhoto());
                 chatRoomUserDto.setMessage(message.getContent());
+                chatRoomUserDto.setStatus(message.getStatus());
                 chatRoomUserDto.setTimestamp(message.getTimestamp());
+                chatRoomUserDto.setNewMessagesCount(newMessagesCount);
                 companions.add(chatRoomUserDto);
             }
         return companions;
@@ -116,8 +120,4 @@ public class ChatMessageService implements IChatMessageService {
         return null;
     }
 
-    @Override
-    public void updateStatuses(String senderId, String recipientId, MessageStatus status) {
-
-    }
 }

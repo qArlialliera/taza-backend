@@ -17,4 +17,5 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
 
     ChatMessage findTopByChatIdOrderByIdDesc(String chatId);
 
+    List<ChatMessage> findAllByChatIdAndStatus(String chatId, MessageStatus status);
 }

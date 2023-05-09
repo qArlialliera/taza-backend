@@ -22,5 +22,4 @@ public interface IChatMessageService {
     String deleteMessage(Long id);
 
     ChatMessage findById(String id);
-    void updateStatuses(String senderId, String recipientId, MessageStatus status);
 }
