@@ -25,12 +25,12 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Order>> getAllOrders() {
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
         return ResponseEntity.ok().body(orderService.getAllOrders());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrder(@PathVariable Long id) {
+    public ResponseEntity<OrderDto> getOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOrder(id));
     }
 
@@ -47,12 +47,12 @@ public class OrderController {
         return ResponseEntity.ok(orderService.deleteOrder(id));
     }
     @GetMapping("user/{userId}")
-    public ResponseEntity<List<Order>> getUserOrders(@PathVariable Long userId) {
+    public ResponseEntity<List<OrderDto>> getUserOrders(@PathVariable Long userId) {
         return ResponseEntity.ok(orderService.getUserOrders(userId));
     }
 
     @GetMapping("company/{companyId}")
-    public ResponseEntity<List<Order>> getCompanyOrders(@PathVariable Long companyId) {
+    public ResponseEntity<List<OrderDto>> getCompanyOrders(@PathVariable Long companyId) {
         return ResponseEntity.ok(orderService.getCompanyOrders(companyId));
     }
 }

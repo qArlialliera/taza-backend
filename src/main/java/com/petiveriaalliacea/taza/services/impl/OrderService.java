@@ -6,7 +6,6 @@ import com.petiveriaalliacea.taza.entities.Order;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.entities.chat.ChatMessage;
 import com.petiveriaalliacea.taza.entities.chat.MessageStatus;
-import com.petiveriaalliacea.taza.repositories.ChatRoomRepository;
 import com.petiveriaalliacea.taza.repositories.CompanyRepository;
 import com.petiveriaalliacea.taza.repositories.OrderRepository;
 import com.petiveriaalliacea.taza.repositories.UserRepository;
@@ -22,10 +21,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,13 +40,13 @@ public class OrderService implements IOrderService {
     private final ChatRoomService chatRoomService;
     private final Mapper mapper;
     @Override
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public List<OrderDto> getAllOrders() {
+        return orderRepository.findAll().stream().map(mapper::toOrderDto).collect(Collectors.toList());
     }
 
     @Override
-    public Order getOrder(Long id) {
-        return orderRepository.findById(id).get();
+    public OrderDto getOrder(Long id) {
+        return mapper.toOrderDto(orderRepository.findById(id).get());
     }
 
     @Override
@@ -107,8 +106,8 @@ public class OrderService implements IOrderService {
 
 
     @Override
-    public List<Order> getUserOrders(Long userId) {
-        return orderRepository.findAllByUser_Id(userId).get();
+    public List<OrderDto> getUserOrders(Long userId) {
+        return orderRepository.findAllByUser_Id(userId).get().stream().map(mapper::toOrderDto).collect(Collectors.toList());
     }
 
     @Override
@@ -117,9 +116,9 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<Order> getCompanyOrders(Long companyId) {
+    public List<OrderDto> getCompanyOrders(Long companyId) {
         Company company = companyRepository.findById(companyId).get();
-        return orderRepository.findAllByCompanyService_Company(company).get();
+        return orderRepository.findAllByCompanyService_Company(company).get().stream().map(mapper::toOrderDto).collect(Collectors.toList());
     }
 
 }
