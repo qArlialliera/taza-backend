@@ -30,7 +30,6 @@ public class User extends BaseEntity<Long> {
     private String phoneNumber;
     private UUID photo;
     @ManyToMany(fetch = EAGER)
-    @JsonIgnore
     private Collection<Role> roles = new ArrayList<>();
     @JsonManagedReference(value="user_review")
     @OneToMany(mappedBy = "user")

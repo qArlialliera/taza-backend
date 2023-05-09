@@ -1,5 +1,6 @@
 package com.petiveriaalliacea.taza.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.petiveriaalliacea.taza.entities.base.BaseEntity;
@@ -22,11 +23,11 @@ import static jakarta.persistence.FetchType.EAGER;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Review extends BaseEntity<Long> {
-    @JsonIgnore
+    @JsonBackReference(value="user_review")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @JsonIgnore
+    @JsonBackReference(value="review_company")
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
