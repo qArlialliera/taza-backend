@@ -103,14 +103,14 @@ public class OrderService implements IOrderService {
             order.get().setStatus(status);
         }
         Order changedOrder = orderRepository.save(order.get());
-        var chatId = chatRoomService.getChatId(user.getId(), order.get().getUser().getId());
         String content = "Заказ в обработке. \nДетали: \nДата и время: " + order.get().getDate() + "\nПлощадь: " +order.get().getArea()+" кв. \nКол. комнат: " + order.get().getRooms();
-        if (changedOrder.getStatus().getId().equals(2))
+        if (status.getId() == 2)
             content = "Заказ в процессе. \nДетали: \nДата и время: " + order.get().getDate() + "\nПлощадь: " +order.get().getArea()+" кв. \nКол. комнат: " + order.get().getRooms();
-        else if (changedOrder.getStatus().getId().equals(3))
+        else if (status.getId() == 3)
             content = "Заказ выполнен. \nДетали: \nДата и время: " + order.get().getDate() + "\nПлощадь: " +order.get().getArea()+" кв. \nКол. комнат: " + order.get().getRooms();
-        else if (changedOrder.getStatus().getId().equals(4))
+        else if (status.getId() == 4)
             content = "Закак отменён. \nДетали: \nДата и время: " + order.get().getDate() + "\nПлощадь: " +order.get().getArea()+" кв. \nКол. комнат: " + order.get().getRooms();
+        var chatId = chatRoomService.getChatId(user.getId(), order.get().getUser().getId());
         ChatMessage message = new ChatMessage(chatId.get(), user.getId(), order.get().getUser().getId(), user.getUsername(), order.get().getUser().getUsername(), content, Date.from(Instant.now()), MessageStatus.DELIVERED);
         ChatMessage sentMessage = chatMessageService.save(message);
         messagingTemplate.convertAndSendToUser(sentMessage.getRecipientName(), "/private", sentMessage); // /user/David/private
