@@ -3,6 +3,7 @@ package com.petiveriaalliacea.taza.services.impl;
 import com.petiveriaalliacea.taza.dto.OrderDto;
 import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.entities.Order;
+import com.petiveriaalliacea.taza.entities.OrderStatus;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.entities.chat.ChatMessage;
 import com.petiveriaalliacea.taza.entities.chat.MessageStatus;
@@ -75,25 +76,45 @@ public class OrderService implements IOrderService {
                 order.get().setComment(orderDto.getComment());
             }
             if (orderDto.getDate() != order.get().getDate() && orderDto.getDate() != null) {
-                order.get().setDate(order.get().getDate());
+                order.get().setDate(orderDto.getDate());
             }
             if (orderDto.getArea() != order.get().getArea()) {
-                order.get().setArea(order.get().getArea());
+                order.get().setArea(orderDto.getArea());
             }
             if (orderDto.getRooms() != order.get().getRooms()) {
-                order.get().setRooms(order.get().getRooms());
-            }
-            if (orderDto.getStatus() != order.get().getStatus()) {
-                order.get().setStatus(order.get().getStatus());
+                order.get().setRooms(orderDto.getRooms());
             }
             if (orderDto.getAdditionalServices() != order.get().getAdditionalServices()) {
-                order.get().setAdditionalServices(order.get().getAdditionalServices());
+                order.get().setAdditionalServices(orderDto.getAdditionalServices());
             }
             if (orderDto.getCompanyService() != order.get().getCompanyService()) {
-                order.get().setCompanyService(order.get().getCompanyService());
+                order.get().setCompanyService(orderDto.getCompanyService());
             }
+
         }
-        return mapper.toOrderDto(order.get());
+        return mapper.toOrderDto(orderRepository.save(order.get()));
+    }
+    @Override
+    public OrderDto changeStatus(String token, Long id, OrderStatus status){
+        User user = userRepository.findByUsername(JwtUtils.getUsername(token))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user!"));
+        Optional<Order> order = orderRepository.findById(id);
+        if (order.isPresent()) {
+            order.get().setStatus(status);
+        }
+        Order changedOrder = orderRepository.save(order.get());
+        var chatId = chatRoomService.getChatId(user.getId(), order.get().getUser().getId());
+        String content = "Заказ в обработке. \nДетали: \nДата и время: " + order.get().getDate() + "\nПлощадь: " +order.get().getArea()+" кв. \nКол. комнат: " + order.get().getRooms();
+        if (changedOrder.getStatus().getId().equals(2))
+            content = "Заказ в процессе. \nДетали: \nДата и время: " + order.get().getDate() + "\nПлощадь: " +order.get().getArea()+" кв. \nКол. комнат: " + order.get().getRooms();
+        else if (changedOrder.getStatus().getId().equals(3))
+            content = "Заказ выполнен. \nДетали: \nДата и время: " + order.get().getDate() + "\nПлощадь: " +order.get().getArea()+" кв. \nКол. комнат: " + order.get().getRooms();
+        else if (changedOrder.getStatus().getId().equals(4))
+            content = "Закак отменён. \nДетали: \nДата и время: " + order.get().getDate() + "\nПлощадь: " +order.get().getArea()+" кв. \nКол. комнат: " + order.get().getRooms();
+        ChatMessage message = new ChatMessage(chatId.get(), user.getId(), order.get().getUser().getId(), user.getUsername(), order.get().getUser().getUsername(), content, Date.from(Instant.now()), MessageStatus.DELIVERED);
+        ChatMessage sentMessage = chatMessageService.save(message);
+        messagingTemplate.convertAndSendToUser(sentMessage.getRecipientName(), "/private", sentMessage); // /user/David/private
+        return mapper.toOrderDto(changedOrder);
     }
     @Override
     public String deleteOrder(Long id) {

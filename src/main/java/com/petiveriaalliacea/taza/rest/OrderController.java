@@ -4,6 +4,7 @@ import com.petiveriaalliacea.taza.dto.OrderDto;
 import com.petiveriaalliacea.taza.dto.RequestDto;
 import com.petiveriaalliacea.taza.entities.Category;
 import com.petiveriaalliacea.taza.entities.Order;
+import com.petiveriaalliacea.taza.entities.OrderStatus;
 import com.petiveriaalliacea.taza.services.impl.OrderService;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,10 @@ public class OrderController {
     public ResponseEntity<OrderDto> getOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOrder(id));
     }
-
+    @PutMapping("/change-status/{id}")
+    public ResponseEntity<OrderDto> changeStatus(@RequestHeader("Authorization") @Parameter(hidden = true) String token, @RequestBody OrderStatus status, @PathVariable Long id){
+        return ResponseEntity.ok(orderService.changeStatus(token, id, status));
+    }
     @PostMapping("/add")
     public ResponseEntity<OrderDto> addNewOrder(@RequestHeader("Authorization") @Parameter(hidden = true) String token, @RequestBody OrderDto orderDto) {
         return ResponseEntity.ok(orderService.addNewOrder(token, orderDto));
