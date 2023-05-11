@@ -117,6 +117,9 @@ public class CompanyService implements ICompanyService {
             if (dto.getCategories() != null) {
                 company.get().setCategories(dto.getCategories());
             }
+            if (dto.isActive() != company.get().isActive()) {
+                company.get().setActive(dto.isActive());
+            }
         }
         return mapper.toCompanyDto(companyRepository.save(company.get()));
 
