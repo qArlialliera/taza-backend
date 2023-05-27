@@ -22,24 +22,23 @@ import static com.petiveriaalliacea.taza.utils.Constants.PRIVATE_API_ENDPOINT;
 @RequiredArgsConstructor
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 public class OrderController {
-
     private final OrderService orderService;
-
     @GetMapping("/all")
     public ResponseEntity<List<OrderDto>> getAllOrders() {
         return ResponseEntity.ok().body(orderService.getAllOrders());
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<OrderDto> getOrder(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOrder(id));
     }
     @PutMapping("/change-status/{id}")
-    public ResponseEntity<OrderDto> changeStatus(@RequestHeader("Authorization") @Parameter(hidden = true) String token, @RequestBody OrderStatus status, @PathVariable Long id){
+    public ResponseEntity<OrderDto> changeStatus(@RequestHeader("Authorization") @Parameter(hidden = true) String token,
+                                                 @RequestBody OrderStatus status,@PathVariable Long id){
         return ResponseEntity.ok(orderService.changeStatus(token, id, status));
     }
     @PostMapping("/add")
-    public ResponseEntity<OrderDto> addNewOrder(@RequestHeader("Authorization") @Parameter(hidden = true) String token, @RequestBody OrderDto orderDto) {
+    public ResponseEntity<OrderDto> addNewOrder(@RequestHeader("Authorization")@Parameter(hidden = true) String token,
+                                                @RequestBody OrderDto orderDto) {
         return ResponseEntity.ok(orderService.addNewOrder(token, orderDto));
     }
     @PutMapping("/{id}")
@@ -54,7 +53,6 @@ public class OrderController {
     public ResponseEntity<List<OrderDto>> getUserOrders(@PathVariable Long userId) {
         return ResponseEntity.ok(orderService.getUserOrders(userId));
     }
-
     @GetMapping("company/{companyId}")
     public ResponseEntity<List<OrderDto>> getCompanyOrders(@PathVariable Long companyId) {
         return ResponseEntity.ok(orderService.getCompanyOrders(companyId));

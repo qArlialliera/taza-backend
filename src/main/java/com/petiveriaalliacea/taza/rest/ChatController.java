@@ -38,7 +38,8 @@ public class ChatController {
 
         ChatMessage savedMessage = chatMessageService.save(chatMessage);
 
-        messagingTemplate.convertAndSendToUser(chatMessage.getRecipientName(), "/private", savedMessage); // /user/David/private
+        messagingTemplate.convertAndSendToUser(chatMessage.getRecipientName(),
+                "/private", savedMessage);
         return savedMessage;
     }
 

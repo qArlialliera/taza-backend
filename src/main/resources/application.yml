@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/taza
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://dpg-chp06lqk728ivvva18c0-a.oregon-postgres.render.com:5432/taza-db
+    username: taza_db_user
+    password: FTKWSJD4iCGcqHHlytht06oVMeHk1RHy
   jpa:
     hibernate:
       ddl-auto: update

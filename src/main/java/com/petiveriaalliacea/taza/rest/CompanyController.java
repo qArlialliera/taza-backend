@@ -37,15 +37,19 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.getCompaniesByCategory(id));
     }
     @GetMapping("/user")
-    public ResponseEntity<CompanyDto> getCompaniesByUser(@RequestHeader("Authorization") @Parameter(hidden = true) String token){
+    public ResponseEntity<CompanyDto> getCompaniesByUser(@RequestHeader("Authorization")
+                                                             @Parameter(hidden = true) String token){
         return ResponseEntity.ok(companyService.getUserCompany(token));
     }
     @GetMapping("/exist-for-user")
-    public ResponseEntity<Boolean> companyExistForUser(@RequestHeader("Authorization") @Parameter(hidden = true) String token){
+    public ResponseEntity<Boolean> companyExistForUser(@RequestHeader("Authorization")
+                                                           @Parameter(hidden = true) String token){
         return ResponseEntity.ok(companyService.getUserCompanyExist(token));
     }
     @PostMapping("/add")
-    public ResponseEntity<CompanyDto> addNewCompany(@RequestBody CompanyRequestDto companyDto, @RequestHeader("Authorization") @Parameter(hidden = true) String token){
+    public ResponseEntity<CompanyDto> addNewCompany(@RequestBody CompanyRequestDto companyDto,
+                                                    @RequestHeader("Authorization")
+                                                    @Parameter(hidden = true) String token){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/companies/add").toUriString());
         return ResponseEntity.created(uri).body(companyService.addNewCompany(token, companyDto));
     }
@@ -55,7 +59,8 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CompanyDto> editCompany(@RequestBody CompanyDto company, @PathVariable Long id){
+    public ResponseEntity<CompanyDto> editCompany(@RequestBody CompanyDto company,
+                                                  @PathVariable Long id){
         return ResponseEntity.ok(companyService.editCompany(id, company));
     }
     @DeleteMapping("/{id}")
@@ -66,10 +71,8 @@ public class CompanyController {
     public void uploadPhoto(@PathVariable("id") Long id, @PathVariable("uuid") UUID photo) {
         companyService.addPhoto(id, photo);
     }
-
     @GetMapping("/photo/get/{id}")
     public ResponseEntity<UUID> getPhoto(@PathVariable Long id) {
         return ResponseEntity.ok(companyService.getPhoto(id));
     }
-
 }
