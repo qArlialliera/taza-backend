@@ -3,6 +3,7 @@ spring:
     url: jdbc:postgresql://dpg-chp06lqk728ivvva18c0-a.oregon-postgres.render.com:5432/taza-db
     username: taza_db_user
     password: FTKWSJD4iCGcqHHlytht06oVMeHk1RHy
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
