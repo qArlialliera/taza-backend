@@ -2,8 +2,10 @@ package com.petiveriaalliacea.taza.services.impl;
 
 import com.petiveriaalliacea.taza.dto.CompanyDto;
 import com.petiveriaalliacea.taza.dto.CompanyRequestDto;
+import com.petiveriaalliacea.taza.dto.CompanyResponseDto;
 import com.petiveriaalliacea.taza.entities.Category;
 import com.petiveriaalliacea.taza.entities.Company;
+import com.petiveriaalliacea.taza.entities.Review;
 import com.petiveriaalliacea.taza.entities.User;
 import com.petiveriaalliacea.taza.repositories.CategoryRepository;
 import com.petiveriaalliacea.taza.repositories.CompanyRepository;
@@ -37,11 +39,25 @@ public class CompanyService implements ICompanyService {
     private final Mapper mapper;
 
     @Override
-    public List<CompanyDto> getCompanies() {
-        return companyRepository.findAll()
-                .stream()
-                .map(mapper::toCompanyDto)
-                .collect(Collectors.toList());
+    public List<CompanyResponseDto> getCompanies() {
+        List<CompanyResponseDto> companiesList = companyRepository.findAll()
+                .stream().map(mapper
+                ::toCompanyResponseDto).collect(Collectors.toList());
+
+        for(CompanyResponseDto company : companiesList)
+            if(company.getReviews() != null && company.getReviews().size() > 0) {
+                Collection<Review> reviewList = company.getReviews();
+                double companyReviewSum = 0;
+                for (Review review : reviewList) {
+                    companyReviewSum += review.getRate();
+                }
+                double companyReview = companyReviewSum/reviewList.size();
+                company.setRate(companyReview);
+            }else {
+                company.setRate(0);
+            }
+
+        return companiesList;
     }
     @Override
     public CompanyDto getCompany(Long id) {

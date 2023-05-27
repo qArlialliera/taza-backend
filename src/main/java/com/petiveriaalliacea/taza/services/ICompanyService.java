@@ -2,13 +2,13 @@ package com.petiveriaalliacea.taza.services;
 
 import com.petiveriaalliacea.taza.dto.CompanyDto;
 import com.petiveriaalliacea.taza.dto.CompanyRequestDto;
-import com.petiveriaalliacea.taza.entities.Company;
+import com.petiveriaalliacea.taza.dto.CompanyResponseDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ICompanyService {
-    List<CompanyDto> getCompanies();
+    List<CompanyResponseDto> getCompanies();
     CompanyDto getCompany(Long id);
 
     List<CompanyDto> getCompaniesByCategory(Long id);

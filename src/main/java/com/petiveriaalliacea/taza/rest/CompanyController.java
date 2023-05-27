@@ -2,6 +2,7 @@ package com.petiveriaalliacea.taza.rest;
 
 import com.petiveriaalliacea.taza.dto.CompanyDto;
 import com.petiveriaalliacea.taza.dto.CompanyRequestDto;
+import com.petiveriaalliacea.taza.dto.CompanyResponseDto;
 import com.petiveriaalliacea.taza.entities.Company;
 import com.petiveriaalliacea.taza.services.impl.CompanyService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,7 +26,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<CompanyDto>> getAllCompanies(){
+    public ResponseEntity<List<CompanyResponseDto>> getAllCompanies(){
         return ResponseEntity.ok().body(companyService.getCompanies());
     }
     @GetMapping("/{id}")

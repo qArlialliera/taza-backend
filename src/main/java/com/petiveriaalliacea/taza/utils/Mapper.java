@@ -17,6 +17,7 @@ public interface Mapper {
     Company toCompany(CompanyRequestDto dto);
 
     CompanyDto toCompanyDto(Company company);
+    CompanyResponseDto toCompanyResponseDto(Company company);
 
     Review toReview(ReviewDto dto);
 
