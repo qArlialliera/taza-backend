@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://dpg-chp06lqk728ivvva18c0-a.oregon-postgres.render.com:5432/taza-db
-    username: taza_db_user
-    password: FTKWSJD4iCGcqHHlytht06oVMeHk1RHy
+    url: jdbc:postgresql://containers-us-west-172.railway.app:7240/railway
+    username: postgres
+    password: rSnz1WMhchDa9uxJMaJ4
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
