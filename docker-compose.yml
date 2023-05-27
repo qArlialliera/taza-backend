@@ -1,0 +1,19 @@
+﻿version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: taza-db
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: taza
+  app:
+    build: ./
+    container_name: taza-app
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+
+
